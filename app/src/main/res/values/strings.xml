@@ -1,3 +1,15 @@
 <resources>
     <string name="app_name">movie_db_training</string>
+    <string name="latest_movie">Latest Movie</string>
+    <string name="now_playing">Now Playing</string>
+    <string name="popular">Popular</string>
+    <string name="top_rated">Top Rated</string>
+    <string name="upcoming">Upcoming</string>
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="menu_item_search">Search</string>
+    <string name="menu_home">Home</string>
+    <string name="menu_favorite">Favorite</string>
+    <string name="menu_list">Your List</string>
+    <string name="app_label">MovieDB</string>
 </resources>
