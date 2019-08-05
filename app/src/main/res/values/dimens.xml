@@ -5,4 +5,6 @@
     <dimen name="card_title_font_size">36sp</dimen>
     <dimen name="card_textview_margin">8dp</dimen>
     <dimen name="toolbar_elevation">4dp</dimen>
+    <dimen name="card_genre_height">120dp</dimen>
+    <dimen name="genre_name_font_size">32sp</dimen>
 </resources>
