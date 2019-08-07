@@ -14,15 +14,19 @@ import androidx.drawerlayout.widget.DrawerLayout;
 
 import com.google.android.material.navigation.NavigationView;
 import com.project.mobile.movie_db_training.genre.GenresListActivity;
+import com.project.mobile.movie_db_training.list.MoviesListActivity;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
     private static final String TAG = MainActivity.class.getSimpleName();
     @BindView(R.id.card_genre)
     CardView cardGenre;
+    @BindView(R.id.card_now_playing)
+    CardView cardNowPlaying;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,6 +36,10 @@ public class MainActivity extends AppCompatActivity
         ButterKnife.bind(this);
         cardGenre.setOnClickListener(view -> {
             startActivity(new Intent(this, GenresListActivity.class));
+        });
+
+        cardNowPlaying.setOnClickListener(view -> {
+            startActivity(new Intent(this, MoviesListActivity.class));
         });
     }
 

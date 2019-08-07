@@ -15,4 +15,5 @@ public class GenresResponse {
     public List<Genre> getGenres() {
         return mGenres;
     }
+
 }
