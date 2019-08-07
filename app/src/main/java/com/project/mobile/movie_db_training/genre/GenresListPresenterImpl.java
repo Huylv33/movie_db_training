@@ -34,7 +34,7 @@ public class GenresListPresenterImpl implements GenresListContract.Presenter {
                     @Override
                     public void onResponse(Call<GenresResponse> call, Response<GenresResponse> response) {
                         if (response.body() != null && response.isSuccessful()) {
-                            onFetchSuccess(response.body().getmGenres());
+                            onFetchSuccess(response.body().getGenres());
                         }
                     }
 

@@ -14,7 +14,7 @@ public class Genre {
         this.mName = name;
     }
 
-    public String getmName() {
+    public String getName() {
         return mName;
     }
 

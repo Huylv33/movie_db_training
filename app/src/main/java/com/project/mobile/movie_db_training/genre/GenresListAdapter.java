@@ -36,7 +36,7 @@ public class GenresListAdapter extends
 
     @Override
     public void onBindViewHolder(@NonNull GenresListViewHolder holder, int position) {
-        holder.genreText.setText(mGenreList.get(position).getmName());
+        holder.genreText.setText(mGenreList.get(position).getName());
     }
 
     @Override

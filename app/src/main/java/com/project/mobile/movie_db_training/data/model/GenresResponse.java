@@ -12,7 +12,7 @@ public class GenresResponse {
         this.mGenres = genres;
     }
 
-    public List<Genre> getmGenres() {
+    public List<Genre> getGenres() {
         return mGenres;
     }
 
