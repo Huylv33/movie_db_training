@@ -9,4 +9,5 @@ import retrofit2.http.Query;
 public interface TMDbService {
     @GET("genre/movie/list?language=en-US")
     Call<GenresResponse> getGenreList(@Query("api_key") String key);
+
 }
