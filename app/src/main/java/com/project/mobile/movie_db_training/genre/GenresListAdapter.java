@@ -36,7 +36,8 @@ public class GenresListAdapter extends
 
     @Override
     public void onBindViewHolder(@NonNull GenresListViewHolder holder, int position) {
-        holder.genreText.setText(mGenreList.get(position).getName());
+        holder.mGenreText.setText(mGenreList.get(position).getName());
+
     }
 
     @Override
@@ -46,9 +47,9 @@ public class GenresListAdapter extends
 
     public static class GenresListViewHolder extends RecyclerView.ViewHolder {
         @BindView(R.id.card_genre_detail)
-        public CardView genreCard;
+        CardView mGenreCard;
         @BindView(R.id.text_genre_name)
-        public TextView genreText;
+        TextView mGenreText;
 
         public GenresListViewHolder(@NonNull android.view.View itemView) {
             super(itemView);
