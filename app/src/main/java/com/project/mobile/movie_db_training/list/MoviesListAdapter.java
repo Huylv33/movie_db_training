@@ -12,6 +12,8 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.project.mobile.movie_db_training.R;
 import com.project.mobile.movie_db_training.data.model.Movie;
+import com.project.mobile.movie_db_training.utils.Constants;
+import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
@@ -20,12 +22,10 @@ import butterknife.ButterKnife;
 
 public class MoviesListAdapter extends RecyclerView.Adapter<MoviesListAdapter.MoviesListViewHolder> {
     private List<Movie> mMovies;
-    private MoviesListContract.View mMoviesListView;
     private Context mContext;
 
-    public MoviesListAdapter(List<Movie> movies, MoviesListContract.View moviesListView, Context context) {
+    public MoviesListAdapter(List<Movie> movies, Context context) {
         mMovies = movies;
-        mMoviesListView = moviesListView;
         mContext = context;
     }
 
@@ -39,11 +39,13 @@ public class MoviesListAdapter extends RecyclerView.Adapter<MoviesListAdapter.Mo
 
     @Override
     public void onBindViewHolder(@NonNull MoviesListAdapter.MoviesListViewHolder holder, int position) {
-        holder.movieTitle.setText(mMovies.get(position).getTitle());
-        holder.movieReleaseDate.setText(String.format(mContext.getString(R.string.release_date),
+        holder.mMovieTitle.setText(mMovies.get(position).getTitle());
+        holder.mMovieReleaseDate.setText(String.format(mContext.getString(R.string.release_date),
                 mMovies.get(position).getReleaseDate()));
-        holder.movieRating.setText(String.format(mContext.getString(R.string.rating),
+        holder.mMovieRating.setText(String.format(mContext.getString(R.string.rating),
                 mMovies.get(position).getVoteAverage()));
+        Picasso.get().load(Constants.IMAGE_BASE_URL + mMovies.get(position)
+                .getBackdropPath()).into(holder.mBackdropImage);
     }
 
     @Override
@@ -53,13 +55,13 @@ public class MoviesListAdapter extends RecyclerView.Adapter<MoviesListAdapter.Mo
 
     public static class MoviesListViewHolder extends RecyclerView.ViewHolder {
         @BindView(R.id.image_backdrop)
-        ImageView backdropImage;
+        ImageView mBackdropImage;
         @BindView(R.id.text_title)
-        TextView movieTitle;
+        TextView mMovieTitle;
         @BindView(R.id.text_rating)
-        TextView movieRating;
+        TextView mMovieRating;
         @BindView(R.id.text_release_date)
-        TextView movieReleaseDate;
+        TextView mMovieReleaseDate;
 
         public MoviesListViewHolder(@NonNull android.view.View itemView) {
             super(itemView);

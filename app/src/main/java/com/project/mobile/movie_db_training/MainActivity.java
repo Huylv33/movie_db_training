@@ -1,6 +1,5 @@
 package com.project.mobile.movie_db_training;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -13,7 +12,8 @@ import androidx.cardview.widget.CardView;
 import androidx.drawerlayout.widget.DrawerLayout;
 
 import com.google.android.material.navigation.NavigationView;
-import com.project.mobile.movie_db_training.genre.GenresListActivity;
+import com.project.mobile.movie_db_training.utils.Constants;
+import com.project.mobile.movie_db_training.utils.Utils;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -22,7 +22,15 @@ public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
     private static final String TAG = MainActivity.class.getSimpleName();
     @BindView(R.id.card_genre)
-    CardView cardGenre;
+    CardView mCardGenre;
+    @BindView(R.id.card_now_playing)
+    CardView mCardNowPlaying;
+    @BindView(R.id.card_popular)
+    CardView mCardPopular;
+    @BindView(R.id.card_top_rated)
+    CardView mCardTopRated;
+    @BindView(R.id.card_upcoming)
+    CardView mCardUpComing;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,9 +38,15 @@ public class MainActivity extends AppCompatActivity
         setContentView(R.layout.activity_main);
         initView();
         ButterKnife.bind(this);
-        cardGenre.setOnClickListener(view -> {
-            startActivity(new Intent(this, GenresListActivity.class));
-        });
+        setListener();
+    }
+
+    private void setListener() {
+        Utils.setListenerForMovieCard(mCardGenre, this, "");
+        Utils.setListenerForMovieCard(mCardNowPlaying, this, Constants.NOW_PLAYING);
+        Utils.setListenerForMovieCard(mCardPopular, this, Constants.POPULAR);
+        Utils.setListenerForMovieCard(mCardTopRated, this, Constants.TOP_RATED);
+        Utils.setListenerForMovieCard(mCardUpComing, this, Constants.UPCOMING);
     }
 
     @Override

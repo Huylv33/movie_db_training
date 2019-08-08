@@ -15,10 +15,5 @@
         app:popupTheme="@style/AppTheme.PopupOverlay"
         app:titleTextColor="@color/color_white" />
 
-    <fragment
-        android:id="@+id/fragment_movies_list"
-        android:name="com.project.mobile.movie_db_training.list.MoviesListFragment"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent" />
-
+    <include layout="@layout/fragment_movies_list" />
 </LinearLayout>
