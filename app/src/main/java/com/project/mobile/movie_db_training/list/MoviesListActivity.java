@@ -28,11 +28,11 @@ public class MoviesListActivity extends AppCompatActivity {
         setContentView(R.layout.activity_movies_list);
         ButterKnife.bind(this);
         Intent intent = getIntent();
-        initToolbar();
         if (intent == null) {
             return;
         }
         mListType = intent.getStringExtra(Constants.LIST_TYPE);
+        initToolbar();
         initFragment();
     }
 

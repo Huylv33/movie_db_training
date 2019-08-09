@@ -1,5 +1,6 @@
 package com.project.mobile.movie_db_training;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -12,6 +13,7 @@ import androidx.cardview.widget.CardView;
 import androidx.drawerlayout.widget.DrawerLayout;
 
 import com.google.android.material.navigation.NavigationView;
+import com.project.mobile.movie_db_training.genre.GenresListActivity;
 import com.project.mobile.movie_db_training.utils.Constants;
 import com.project.mobile.movie_db_training.utils.Utils;
 
@@ -42,7 +44,10 @@ public class MainActivity extends AppCompatActivity
     }
 
     private void setListener() {
-        Utils.setListenerForMovieCard(mCardGenre, this, "");
+        mCardGenre.setOnClickListener(view -> {
+            Intent intent = new Intent(this, GenresListActivity.class);
+            startActivity(intent);
+        });
         Utils.setListenerForMovieCard(mCardNowPlaying, this, Constants.NOW_PLAYING);
         Utils.setListenerForMovieCard(mCardPopular, this, Constants.POPULAR);
         Utils.setListenerForMovieCard(mCardTopRated, this, Constants.TOP_RATED);

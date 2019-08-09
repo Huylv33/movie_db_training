@@ -14,7 +14,6 @@ public class MovieResponse {
         return mMovies;
     }
 
-
     public int getTotalPages() {
         return totalPages;
     }

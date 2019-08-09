@@ -13,6 +13,8 @@ public class Movie {
     private String mBackdropPath;
     @SerializedName("release_date")
     private String mReleaseDate;
+    @SerializedName("overview")
+    private String mOverview;
 
     public int getId() {
         return mId;
