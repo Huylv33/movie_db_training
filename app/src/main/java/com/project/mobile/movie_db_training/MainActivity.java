@@ -13,12 +13,15 @@ import androidx.cardview.widget.CardView;
 import androidx.drawerlayout.widget.DrawerLayout;
 
 import com.google.android.material.navigation.NavigationView;
+import com.project.mobile.movie_db_training.detail.MovieDetailActivity;
 import com.project.mobile.movie_db_training.genre.GenresListActivity;
 import com.project.mobile.movie_db_training.utils.Constants;
+import com.project.mobile.movie_db_training.utils.IntentUtils;
 import com.project.mobile.movie_db_training.utils.Utils;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -33,7 +36,8 @@ public class MainActivity extends AppCompatActivity
     CardView mCardTopRated;
     @BindView(R.id.card_upcoming)
     CardView mCardUpComing;
-
+    @BindView(R.id.card_latest)
+    CardView mCardLatest;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -44,16 +48,27 @@ public class MainActivity extends AppCompatActivity
     }
 
     private void setListener() {
+        mCardLatest.setOnClickListener(view -> {
+            Intent intent = new Intent(this, MovieDetailActivity.class);
+            startActivity(intent);
+        });
         mCardGenre.setOnClickListener(view -> {
             Intent intent = new Intent(this, GenresListActivity.class);
             startActivity(intent);
         });
-        Utils.setListenerForMovieCard(mCardNowPlaying, this, Constants.NOW_PLAYING);
-        Utils.setListenerForMovieCard(mCardPopular, this, Constants.POPULAR);
-        Utils.setListenerForMovieCard(mCardTopRated, this, Constants.TOP_RATED);
-        Utils.setListenerForMovieCard(mCardUpComing, this, Constants.UPCOMING);
+        mCardUpComing.setOnClickListener(view -> {
+            IntentUtils.startMoviesListActivity(this,Constants.UPCOMING);
+        });
+        mCardTopRated.setOnClickListener(view -> {
+            IntentUtils.startMoviesListActivity(this, Constants.TOP_RATED);
+        });
+        mCardNowPlaying.setOnClickListener(view -> {
+            IntentUtils.startMoviesListActivity(this, Constants.NOW_PLAYING);
+        });
+        mCardPopular.setOnClickListener(view -> {
+            IntentUtils.startMoviesListActivity(this, Constants.POPULAR);
+        });
     }
-
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.main, menu);

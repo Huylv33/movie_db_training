@@ -6,6 +6,5 @@
         android:id="@+id/image_thumb"
         android:layout_width="@dimen/image_thumb_size"
         android:layout_height="@dimen/image_thumb_size"
-        android:layout_margin="@dimen/margin_medium"
-        />
+        android:layout_margin="@dimen/margin_medium" />
 </FrameLayout>

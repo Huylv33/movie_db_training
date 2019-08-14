@@ -7,6 +7,8 @@ import java.util.List;
 
 public interface GenresListContract {
     interface View {
+        void onGenreClick(Genre genre);
+
         void showGenres(List<Genre> genresList);
 
         void loadingStart();

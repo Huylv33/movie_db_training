@@ -37,7 +37,9 @@ public class GenresListAdapter extends
     @Override
     public void onBindViewHolder(@NonNull GenresListViewHolder holder, int position) {
         holder.mGenreText.setText(mGenreList.get(position).getName());
-
+        holder.itemView.setOnClickListener(view -> {
+            mGenresListView.onGenreClick(mGenreList.get(position));
+        });
     }
 
     @Override
@@ -45,15 +47,16 @@ public class GenresListAdapter extends
         return mGenreList != null ? mGenreList.size() : 0;
     }
 
-    public static class GenresListViewHolder extends RecyclerView.ViewHolder {
+    static class GenresListViewHolder extends RecyclerView.ViewHolder {
         @BindView(R.id.card_genre_detail)
         CardView mGenreCard;
         @BindView(R.id.text_genre_name)
         TextView mGenreText;
 
-        public GenresListViewHolder(@NonNull android.view.View itemView) {
+        GenresListViewHolder(@NonNull android.view.View itemView) {
             super(itemView);
             ButterKnife.bind(this, itemView);
         }
     }
+
 }

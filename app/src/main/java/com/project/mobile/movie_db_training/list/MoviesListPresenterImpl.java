@@ -60,6 +60,30 @@ public class MoviesListPresenterImpl implements MoviesListContract.Presenter {
         }
     }
 
+    @Override
+    public void fetchMoviesByGenre(String genreId) {
+        if (!mIsLoading) {
+            mView.loadingStart();
+            mIsLoading = true;
+            NetworkModule.getTMDbService()
+                    .getMoviesByGenre(BuildConfig.TMDB_API_KEY,genreId,mPage)
+                    .enqueue(new Callback<MovieResponse>() {
+                        @Override
+                        public void onResponse(Call<MovieResponse> call, Response<MovieResponse> response) {
+                            if (response.isSuccessful() && response.body() != null) {
+                                onFetchSuccess(response.body().getMovies());
+                                mTotalPages = response.body().getTotalPages();
+                            }
+                        }
+
+                        @Override
+                        public void onFailure(Call<MovieResponse> call, Throwable t) {
+                            mView.loadingFail(t.getMessage());
+                        }
+                    });
+        }
+    }
+
     private void onFetchSuccess(List<Movie> movies) {
         mIsLoading = false;
         mView.showMovies(movies);
@@ -70,6 +94,14 @@ public class MoviesListPresenterImpl implements MoviesListContract.Presenter {
         if (!isLoading() && mPage < getTotalPages()) {
             mPage++;
             fetchMovies(listType);
+        }
+    }
+
+    @Override
+    public void loadMoreByGenre(String genreId) {
+        if (!isLoading() && mPage < getTotalPages()) {
+            mPage++;
+            fetchMoviesByGenre(genreId);
         }
     }
 }

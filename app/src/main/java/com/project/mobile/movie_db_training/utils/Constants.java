@@ -11,5 +11,11 @@ public class Constants {
     public static final String POPULAR_TITLE_BAR = "Popular";
     public static final String TOP_RATED_TITLE_BAR = "Top Rated";
     public static final String NOW_PLAYING_TITLE_BAR = "Now Playing";
-    public static final String IMAGE_BASE_URL = "https://image.tmdb.org/t/p/w200";
+    public static final String IMAGE_BASE_URL = "https://image.tmdb.org/t/p/";
+    public static final String MOVIE_KEY = "movie_key";
+    public static final String DETAIL = "Detail";
+    public static final String IMAGE_THUMB_URL = "https://img.youtube.com/vi/";
+    public static final String GENRE = "genre";
+    public static final int FAVORITE_ACTIVE = 1;
+    public static final int FAVORITE_NON_ACTIVE  = 0;
 }

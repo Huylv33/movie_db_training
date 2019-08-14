@@ -1,6 +1,7 @@
 package com.project.mobile.movie_db_training.list;
 
 
+import android.content.Context;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,6 +15,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.snackbar.Snackbar;
 import com.project.mobile.movie_db_training.R;
+import com.project.mobile.movie_db_training.data.model.Genre;
 import com.project.mobile.movie_db_training.data.model.Movie;
 import com.project.mobile.movie_db_training.utils.Constants;
 
@@ -35,10 +37,40 @@ public class MoviesListFragment extends Fragment implements MoviesListContract.V
     private Unbinder mUnbinder;
     private List<Movie> mMovies = new ArrayList<>();
     private MoviesListPresenterImpl mPresenter;
-    private String mListType = "";
+    private String mListType;
+    private Genre mGenre;
+    private Callback mCallback;
 
     public MoviesListFragment() {
         // Required empty public constructor
+    }
+
+    public static MoviesListFragment newInstance(String listType) {
+        Bundle args = new Bundle();
+        args.putString(Constants.LIST_TYPE, listType);
+        MoviesListFragment fragment = new MoviesListFragment();
+        fragment.setArguments(args);
+        return fragment;
+    }
+
+    public static MoviesListFragment newInstance(Genre genre) {
+        Bundle args = new Bundle();
+        args.putParcelable(Constants.GENRE, genre);
+        MoviesListFragment fragment = new MoviesListFragment();
+        fragment.setArguments(args);
+        return fragment;
+    }
+
+    public void setCallback(Callback callback) {
+        mCallback = callback;
+    }
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        if (context instanceof Callback) {
+            mCallback = (Callback) context;
+        }
     }
 
     @Override
@@ -48,7 +80,12 @@ public class MoviesListFragment extends Fragment implements MoviesListContract.V
         mUnbinder = ButterKnife.bind(this, rootView);
         initLayout();
         if (getArguments() != null) {
-            mListType = getArguments().getString(Constants.LIST_TYPE);
+            if (getArguments().containsKey(Constants.LIST_TYPE)) {
+                mListType = getArguments().getString(Constants.LIST_TYPE);
+            }
+            else if (getArguments().containsKey(Constants.GENRE)){
+                mGenre = getArguments().getParcelable(Constants.GENRE);
+            }
         }
         return rootView;
     }
@@ -58,7 +95,8 @@ public class MoviesListFragment extends Fragment implements MoviesListContract.V
         super.onViewCreated(view, savedInstanceState);
         mPresenter = new MoviesListPresenterImpl();
         mPresenter.setView(this);
-        mPresenter.fetchMovies(mListType);
+        if (mListType != null) mPresenter.fetchMovies(mListType);
+        else if (mGenre != null) mPresenter.fetchMoviesByGenre(mGenre.getId());
     }
 
     private void initLayout() {
@@ -70,13 +108,19 @@ public class MoviesListFragment extends Fragment implements MoviesListContract.V
                 int totalItemCount = layoutManager.getItemCount();
                 int lastVisibleItem = layoutManager.findLastVisibleItemPosition();
                 if (totalItemCount - 1 == lastVisibleItem) {
-                    mPresenter.loadMore(mListType);
+                    if (mListType != null) mPresenter.loadMore(mListType);
+                    else  if (mGenre != null) mPresenter.loadMoreByGenre(mGenre.getId());
                 }
             }
         });
         mMoviesListRv.setLayoutManager(layoutManager);
-        mAdapter = new MoviesListAdapter(mMovies, getContext());
+        mAdapter = new MoviesListAdapter(mMovies, this);
         mMoviesListRv.setAdapter(mAdapter);
+    }
+
+    @Override
+    public void onMovieClick(Movie movie) {
+        mCallback.onMovieClick(movie);
     }
 
     @Override
@@ -103,4 +147,7 @@ public class MoviesListFragment extends Fragment implements MoviesListContract.V
         mPresenter.destroy();
     }
 
+    interface Callback {
+        void onMovieClick(Movie movie);
+    }
 }

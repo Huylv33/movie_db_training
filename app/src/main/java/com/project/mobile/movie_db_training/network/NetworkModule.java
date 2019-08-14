@@ -18,4 +18,5 @@ public class NetworkModule {
         }
         return retrofit.create(TMDbService.class);
     }
+
 }

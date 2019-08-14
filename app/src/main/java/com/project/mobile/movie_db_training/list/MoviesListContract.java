@@ -6,6 +6,8 @@ import java.util.List;
 
 public interface MoviesListContract {
     interface View {
+        void onMovieClick(Movie movie);
+
         void showMovies(List<Movie> movies);
 
         void loadingStart();
@@ -16,7 +18,11 @@ public interface MoviesListContract {
     interface Presenter {
         void fetchMovies(String listType);
 
+        void fetchMoviesByGenre(String genreId);
+
         void loadMore(String listType);
+
+        void loadMoreByGenre(String genreId);
 
         void setView(View view);
 
