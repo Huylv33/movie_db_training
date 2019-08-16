@@ -3,6 +3,7 @@ package com.project.mobile.movie_db_training.list;
 
 import android.content.Context;
 import android.view.LayoutInflater;
+import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -23,16 +24,18 @@ import butterknife.ButterKnife;
 public class MoviesListAdapter extends RecyclerView.Adapter<MoviesListAdapter.MoviesListViewHolder> {
     private List<Movie> mMovies;
     private Context mContext;
+    private MoviesListFragment.Callback mCallback;
 
-    public MoviesListAdapter(List<Movie> movies, Context context) {
+    public MoviesListAdapter(List<Movie> movies, MoviesListFragment.Callback callback) {
         mMovies = movies;
-        mContext = context;
+        mCallback = callback;
     }
 
     @NonNull
     @Override
     public MoviesListAdapter.MoviesListViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        android.view.View rootView = LayoutInflater.from(parent.getContext())
+        mContext = parent.getContext();
+        View rootView = LayoutInflater.from(mContext)
                 .inflate(R.layout.movie_item, parent, false);
         return new MoviesListAdapter.MoviesListViewHolder(rootView);
     }
@@ -44,8 +47,11 @@ public class MoviesListAdapter extends RecyclerView.Adapter<MoviesListAdapter.Mo
                 mMovies.get(position).getReleaseDate()));
         holder.mMovieRating.setText(String.format(mContext.getString(R.string.rating),
                 mMovies.get(position).getVoteAverage()));
-        Picasso.get().load(Constants.IMAGE_BASE_URL + mMovies.get(position)
-                .getBackdropPath()).into(holder.mBackdropImage);
+        Picasso.get().load(Constants.IMAGE_BASE_URL + Constants.SMALL_IMAGE_WITDH_PATH
+                + mMovies.get(position).getBackdropPath()).into(holder.mBackdropImage);
+        holder.itemView.setOnClickListener(view -> {
+            mCallback.onMovieClick(mMovies.get(position));
+        });
     }
 
     @Override
@@ -67,6 +73,5 @@ public class MoviesListAdapter extends RecyclerView.Adapter<MoviesListAdapter.Mo
             super(itemView);
             ButterKnife.bind(this, itemView);
         }
-
     }
 }

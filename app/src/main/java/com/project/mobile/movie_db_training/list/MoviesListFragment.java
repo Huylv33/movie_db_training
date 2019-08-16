@@ -1,6 +1,7 @@
 package com.project.mobile.movie_db_training.list;
 
 
+import android.content.Context;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -36,9 +37,25 @@ public class MoviesListFragment extends Fragment implements MoviesListContract.V
     private List<Movie> mMovies = new ArrayList<>();
     private MoviesListPresenterImpl mPresenter;
     private String mListType = "";
-
+    private Callback mCallback;
     public MoviesListFragment() {
         // Required empty public constructor
+    }
+
+    public static MoviesListFragment newInstance(String listType) {
+        Bundle args = new Bundle();
+        args.putString(Constants.LIST_TYPE, listType);
+        MoviesListFragment fragment = new MoviesListFragment();
+        fragment.setArguments(args);
+        return fragment;
+    }
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        if (context instanceof Callback) {
+            mCallback = (Callback) context;
+        }
     }
 
     @Override
@@ -75,7 +92,7 @@ public class MoviesListFragment extends Fragment implements MoviesListContract.V
             }
         });
         mMoviesListRv.setLayoutManager(layoutManager);
-        mAdapter = new MoviesListAdapter(mMovies, getContext());
+        mAdapter = new MoviesListAdapter(mMovies, mCallback);
         mMoviesListRv.setAdapter(mAdapter);
     }
 
@@ -103,4 +120,13 @@ public class MoviesListFragment extends Fragment implements MoviesListContract.V
         mPresenter.destroy();
     }
 
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        mCallback = null;
+    }
+
+    interface Callback {
+        void onMovieClick(Movie movie);
+    }
 }
