@@ -20,4 +20,5 @@
     <dimen name="movie_name_font_size">32sp</dimen>
     <dimen name="fab_elevation">6dp</dimen>
     <dimen name="margin_large">32dp</dimen>
+    <dimen name="review_padding">16dp</dimen>
 </resources>

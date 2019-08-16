@@ -22,7 +22,7 @@
             android:padding="@dimen/content_main_padding">
 
             <androidx.cardview.widget.CardView
-                android:id="@+id/card_latest_movie"
+                android:id="@+id/card_latest"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:clickable="true"
