@@ -20,14 +20,18 @@ import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.snackbar.Snackbar;
 import com.project.mobile.movie_db_training.R;
 import com.project.mobile.movie_db_training.data.model.Movie;
+import com.project.mobile.movie_db_training.data.model.Review;
 import com.project.mobile.movie_db_training.data.model.Video;
 import com.project.mobile.movie_db_training.utils.Constants;
 import com.squareup.picasso.Picasso;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
@@ -51,9 +55,15 @@ public class MovieDetailFragment extends Fragment implements MovieDetailContract
     TextView mReleaseDate;
     @BindView(R.id.toolbar)
     Toolbar mToolbar;
+    @BindView(R.id.review_title)
+    TextView mReviewTitle;
+    @BindView(R.id.rv_reviews)
+    RecyclerView mReviewsRv;
+    private ReviewsListAdapter mReviewsAdapter;
     private Unbinder mUnbinder;
     private Movie mMovie;
     private MovieDetailContract.Presenter mPresenter;
+    private List<Review> mReviews = new ArrayList<>();
 
     public MovieDetailFragment() {
         // Required empty public constructor
@@ -73,6 +83,7 @@ public class MovieDetailFragment extends Fragment implements MovieDetailContract
         View rootView = inflater.inflate(R.layout.fragment_movie_detail, container, false);
         mUnbinder = ButterKnife.bind(this, rootView);
         setToolbar();
+        initReviewsLayout();
         return rootView;
     }
 
@@ -87,6 +98,7 @@ public class MovieDetailFragment extends Fragment implements MovieDetailContract
                 mMovie = movie;
                 showInfo(mMovie);
                 mPresenter.fetchVideos(mMovie.getId());
+                mPresenter.fetchReviews(mMovie.getId());
             }
         }
     }
@@ -103,6 +115,24 @@ public class MovieDetailFragment extends Fragment implements MovieDetailContract
         });
     }
 
+    private void initReviewsLayout() {
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
+        mReviewsRv.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
+                int totalItemCount = linearLayoutManager.getItemCount();
+                int lastVisibleItem = linearLayoutManager.findLastVisibleItemPosition();
+                if (totalItemCount == lastVisibleItem + 1) {
+                    mPresenter.loadMoreReviews(mMovie.getId());
+                }
+            }
+        });
+        mReviewsRv.setLayoutManager(linearLayoutManager);
+        mReviewsAdapter = new ReviewsListAdapter(mReviews);
+        mReviewsRv.setAdapter(mReviewsAdapter);
+    }
+
     @Override
     public void showInfo(Movie movie) {
         this.mMovie = movie;
@@ -117,7 +147,7 @@ public class MovieDetailFragment extends Fragment implements MovieDetailContract
 
     @Override
     public void showVideos(List<Video> videos) {
-        if (getActivity() == null) return;
+        if (getActivity() == null || videos.size() == 0) return;
         HorizontalScrollView horizontalTrailers = getActivity().findViewById(R.id.horizontal_trailers);
         ViewGroup trailers = horizontalTrailers.findViewById(R.id.trailers);
         horizontalTrailers.setVisibility(View.VISIBLE);
@@ -139,6 +169,16 @@ public class MovieDetailFragment extends Fragment implements MovieDetailContract
         }
     }
 
+    @Override
+    public void showReviews(@NonNull List<Review> reviews) {
+        mReviewTitle.setText(String.format(getString(R.string.review), reviews.size()));
+        if (reviews.size() > 0) {
+            mReviews.addAll(reviews);
+            mReviewsRv.setVisibility(View.VISIBLE);
+            mReviewsAdapter.notifyDataSetChanged();
+        }
+    }
+
     private void onImageThumbClick(View view) {
         String videoUrl = Constants.BASE_YOUTUBE_URL + view.getTag();
         Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(videoUrl));
@@ -152,7 +192,7 @@ public class MovieDetailFragment extends Fragment implements MovieDetailContract
     }
 
     @Override
-    public void loadingFail(String message) {
+    public void showLoading(String message) {
         if (getView() != null) Snackbar.make(getView(),message,Snackbar.LENGTH_SHORT).show();
     }
 

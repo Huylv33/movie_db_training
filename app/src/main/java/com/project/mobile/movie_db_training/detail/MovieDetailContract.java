@@ -1,6 +1,7 @@
 package com.project.mobile.movie_db_training.detail;
 
 import com.project.mobile.movie_db_training.data.model.Movie;
+import com.project.mobile.movie_db_training.data.model.Review;
 import com.project.mobile.movie_db_training.data.model.Video;
 
 import java.util.List;
@@ -11,7 +12,9 @@ public class MovieDetailContract {
 
         void showVideos(List<Video> videos);
 
-        void loadingFail(String message);
+        void showReviews(List<Review> reviews);
+
+        void showLoading(String message);
     }
 
     interface Presenter {
@@ -20,5 +23,9 @@ public class MovieDetailContract {
         void destroy();
 
         void fetchVideos(String movieId);
+
+        void fetchReviews(String movieId);
+
+        void loadMoreReviews(String movieId);
     }
 }
