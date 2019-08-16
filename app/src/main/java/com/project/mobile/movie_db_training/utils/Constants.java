@@ -14,9 +14,13 @@ public class Constants {
     public static final String IMAGE_BASE_URL = "https://image.tmdb.org/t/p/";
     public static final String MOVIE_KEY = "movie_key";
     public static final String DETAIL = "Detail";
-    public static final String IMAGE_THUMB_URL = "https://img.youtube.com/vi/";
+    public static final String BASE_IMAGE_THUMB_URL = "https://img.youtube.com/vi/";
     public static final String GENRE = "genre";
     public static final int FAVORITE_ACTIVE = 1;
-    public static final int FAVORITE_NON_ACTIVE  = 0;
+    public static final int FAVORITE_NON_ACTIVE = 0;
     public static final String SMALL_IMAGE_WITDH_PATH = "w200/";
+    public static final String LARGE_IMAGE_WITDH_PATH = "w400/";
+    public static final String BASE_YOUTUBE_URL = "https://youtube.com/watch?v=";
+    public static final String PLAY_VIDEO_ERROR = "Error: cannot play video";
+    public static final String IMAGE_THUMB_PATH = "/default.jpg";
 }
