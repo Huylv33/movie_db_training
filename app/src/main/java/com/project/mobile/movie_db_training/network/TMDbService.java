@@ -2,6 +2,7 @@ package com.project.mobile.movie_db_training.network;
 
 import com.project.mobile.movie_db_training.data.model.GenresResponse;
 import com.project.mobile.movie_db_training.data.model.MovieResponse;
+import com.project.mobile.movie_db_training.data.model.VideoResponse;
 
 import retrofit2.Call;
 import retrofit2.http.GET;
@@ -16,4 +17,7 @@ public interface TMDbService {
     Call<MovieResponse> getMovieList(@Path("listType") String listType,
                                      @Query("api_key") String key,
                                      @Query("page") int page);
+
+    @GET("movie/{movie_id}/videos?language=en-US")
+    Call<VideoResponse> getVideos(@Path("movie_id") String id, @Query("api_key") String key);
 }

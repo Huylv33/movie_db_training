@@ -14,8 +14,7 @@
         android:theme="@style/Theme.AppCompat.NoActionBar">
         <activity android:name=".list.MoviesListActivity"
             android:parentActivityName=".MainActivity"></activity>
-        <activity android:name=".detail.MovieDetailActivity"
-            android:parentActivityName=".MainActivity"></activity>
+        <activity android:name=".detail.MovieDetailActivity"></activity>
         <activity
             android:name=".genre.GenresListActivity"
             android:parentActivityName=".MainActivity"></activity>

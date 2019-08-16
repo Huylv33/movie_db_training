@@ -67,6 +67,10 @@ public class Movie implements Parcelable {
         return mReleaseDate;
     }
 
+    public String getOverview() {
+        return mOverview;
+    }
+
     @Override
     public int describeContents() {
         return 0;
