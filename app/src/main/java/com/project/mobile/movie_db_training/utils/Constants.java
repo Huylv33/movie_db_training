@@ -23,4 +23,6 @@ public class Constants {
     public static final String BASE_YOUTUBE_URL = "https://youtube.com/watch?v=";
     public static final String PLAY_VIDEO_ERROR = "Error: cannot play video";
     public static final String IMAGE_THUMB_PATH = "/default.jpg";
+    public static final int MAX_LINE_REVIEW = 5;
+    public static final String LOADING_START = "Loading...";
 }
