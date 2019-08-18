@@ -1,6 +1,7 @@
 package com.project.mobile.movie_db_training.genre;
 
 import android.view.LayoutInflater;
+import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
@@ -19,17 +20,17 @@ import butterknife.ButterKnife;
 public class GenresListAdapter extends
         RecyclerView.Adapter<GenresListAdapter.GenresListViewHolder> {
     private List<Genre> mGenreList;
-    private GenresListContract.View mGenresListView;
+    private GenresListFragment.Callback mCallback;
 
-    public GenresListAdapter(List<Genre> mGenreList, GenresListContract.View mGenresListView) {
+    public GenresListAdapter(List<Genre> mGenreList, GenresListFragment.Callback callback) {
         this.mGenreList = mGenreList;
-        this.mGenresListView = mGenresListView;
+        this.mCallback = callback;
     }
 
     @NonNull
     @Override
     public GenresListViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        android.view.View rootView = LayoutInflater.from(parent.getContext())
+        View rootView = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.genre_item, parent, false);
         return new GenresListViewHolder(rootView);
     }
@@ -37,7 +38,9 @@ public class GenresListAdapter extends
     @Override
     public void onBindViewHolder(@NonNull GenresListViewHolder holder, int position) {
         holder.mGenreText.setText(mGenreList.get(position).getName());
-
+        holder.itemView.setOnClickListener(view -> {
+            mCallback.onGenreClick(mGenreList.get(position));
+        });
     }
 
     @Override

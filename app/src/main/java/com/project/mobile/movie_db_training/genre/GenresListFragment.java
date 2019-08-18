@@ -1,6 +1,7 @@
 package com.project.mobile.movie_db_training.genre;
 
 
+import android.content.Context;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
@@ -33,9 +34,18 @@ public class GenresListFragment extends Fragment implements GenresListContract.V
     private List<Genre> mGenreList = new ArrayList<>();
     private GenresListContract.Presenter mGenreListPresenter;
     private Unbinder mUnbinder;
+    private Callback mCallback;
 
     public GenresListFragment() {
         // Required empty public constructor
+    }
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        if (context instanceof Callback) {
+            mCallback = (Callback) context;
+        }
     }
 
     @Override
@@ -59,7 +69,7 @@ public class GenresListFragment extends Fragment implements GenresListContract.V
     private void initLayout() {
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getActivity());
         mGenresListRv.setLayoutManager(layoutManager);
-        mAdapter = new GenresListAdapter(mGenreList, this);
+        mAdapter = new GenresListAdapter(mGenreList, mCallback);
         mGenresListRv.setAdapter(mAdapter);
     }
 
@@ -86,5 +96,15 @@ public class GenresListFragment extends Fragment implements GenresListContract.V
         super.onDestroyView();
         mUnbinder = null;
         mGenreListPresenter.destroy();
+    }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        mCallback = null;
+    }
+
+    interface Callback {
+        void onGenreClick(Genre genre);
     }
 }

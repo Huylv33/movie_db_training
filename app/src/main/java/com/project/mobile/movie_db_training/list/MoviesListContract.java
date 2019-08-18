@@ -8,15 +8,14 @@ public interface MoviesListContract {
     interface View {
         void showMovies(List<Movie> movies);
 
-        void loadingStart();
-
-        void loadingFail(String error);
+        void showLoading(String message);
     }
 
     interface Presenter {
-        void fetchMovies(String listType);
 
-        void loadMore(String listType);
+        void fetchMovies(String option);
+
+        void loadMore(String option);
 
         void setView(View view);
 

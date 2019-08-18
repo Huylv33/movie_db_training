@@ -1,6 +1,7 @@
 package com.project.mobile.movie_db_training.network;
 
 import com.project.mobile.movie_db_training.data.model.GenresResponse;
+import com.project.mobile.movie_db_training.data.model.Movie;
 import com.project.mobile.movie_db_training.data.model.MovieResponse;
 import com.project.mobile.movie_db_training.data.model.ReviewResponse;
 import com.project.mobile.movie_db_training.data.model.VideoResponse;
@@ -26,4 +27,12 @@ public interface TMDbService {
     Call<ReviewResponse> getReviews(@Path("movie_id") String id,
                                     @Query("api_key") String key,
                                     @Query("page") int page);
+
+    @GET("discover/movie")
+    Call<MovieResponse> getMoviesByGenre(@Query("api_key") String key,
+                                         @Query("with_genres") String genreId,
+                                         @Query("page") int page);
+
+    @GET("movie/latest?language=en-US")
+    Call<Movie> getLatestMovie(@Query("api_key") String key);
 }

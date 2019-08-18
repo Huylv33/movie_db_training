@@ -15,6 +15,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.snackbar.Snackbar;
 import com.project.mobile.movie_db_training.R;
+import com.project.mobile.movie_db_training.data.model.Genre;
 import com.project.mobile.movie_db_training.data.model.Movie;
 import com.project.mobile.movie_db_training.utils.Constants;
 
@@ -36,8 +37,9 @@ public class MoviesListFragment extends Fragment implements MoviesListContract.V
     private Unbinder mUnbinder;
     private List<Movie> mMovies = new ArrayList<>();
     private MoviesListPresenterImpl mPresenter;
-    private String mListType = "";
+    private String mOption; // list_type or genre_id
     private Callback mCallback;
+
     public MoviesListFragment() {
         // Required empty public constructor
     }
@@ -45,6 +47,14 @@ public class MoviesListFragment extends Fragment implements MoviesListContract.V
     public static MoviesListFragment newInstance(String listType) {
         Bundle args = new Bundle();
         args.putString(Constants.LIST_TYPE, listType);
+        MoviesListFragment fragment = new MoviesListFragment();
+        fragment.setArguments(args);
+        return fragment;
+    }
+
+    public static MoviesListFragment newInstance(Genre genre) {
+        Bundle args = new Bundle();
+        args.putParcelable(Constants.GENRE, genre);
         MoviesListFragment fragment = new MoviesListFragment();
         fragment.setArguments(args);
         return fragment;
@@ -65,7 +75,12 @@ public class MoviesListFragment extends Fragment implements MoviesListContract.V
         mUnbinder = ButterKnife.bind(this, rootView);
         initLayout();
         if (getArguments() != null) {
-            mListType = getArguments().getString(Constants.LIST_TYPE);
+            if (getArguments().containsKey(Constants.LIST_TYPE)) {
+                mOption = getArguments().getString(Constants.LIST_TYPE);
+            } else {
+                Genre genre = getArguments().getParcelable(Constants.GENRE);
+                mOption = genre.getId();
+            }
         }
         return rootView;
     }
@@ -75,7 +90,7 @@ public class MoviesListFragment extends Fragment implements MoviesListContract.V
         super.onViewCreated(view, savedInstanceState);
         mPresenter = new MoviesListPresenterImpl();
         mPresenter.setView(this);
-        mPresenter.fetchMovies(mListType);
+        mPresenter.fetchMovies(mOption);
     }
 
     private void initLayout() {
@@ -87,7 +102,7 @@ public class MoviesListFragment extends Fragment implements MoviesListContract.V
                 int totalItemCount = layoutManager.getItemCount();
                 int lastVisibleItem = layoutManager.findLastVisibleItemPosition();
                 if (totalItemCount - 1 == lastVisibleItem) {
-                    mPresenter.loadMore(mListType);
+                    mPresenter.loadMore(mOption);
                 }
             }
         });
@@ -104,13 +119,8 @@ public class MoviesListFragment extends Fragment implements MoviesListContract.V
     }
 
     @Override
-    public void loadingStart() {
-        Snackbar.make(mMoviesListRv, "Loading movies", Snackbar.LENGTH_SHORT).show();
-    }
-
-    @Override
-    public void loadingFail(String error) {
-        Snackbar.make(mMoviesListRv, error, Snackbar.LENGTH_SHORT).show();
+    public void showLoading(String message) {
+        Snackbar.make(mMoviesListRv, message, Snackbar.LENGTH_LONG).show();
     }
 
     @Override
