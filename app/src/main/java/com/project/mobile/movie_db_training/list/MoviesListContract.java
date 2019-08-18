@@ -27,5 +27,7 @@ public interface MoviesListContract {
         void setView(View view);
 
         void destroy();
+
+        void showFavoriteMovie();
     }
 }

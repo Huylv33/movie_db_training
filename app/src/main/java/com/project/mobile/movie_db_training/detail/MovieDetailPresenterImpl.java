@@ -11,6 +11,7 @@ import com.project.mobile.movie_db_training.data.model.ReviewResponse;
 import com.project.mobile.movie_db_training.data.model.Video;
 import com.project.mobile.movie_db_training.data.model.VideoResponse;
 import com.project.mobile.movie_db_training.network.NetworkModule;
+import com.project.mobile.movie_db_training.utils.AppExecutors;
 import com.project.mobile.movie_db_training.utils.Constants;
 
 import java.util.List;
@@ -25,11 +26,11 @@ public class MovieDetailPresenterImpl implements MovieDetailContract.Presenter {
     private boolean mIsLoading;
     private int mTotalReviewPage;
     private MovieDatabase mMovieDatabase;
-
     public MovieDetailPresenterImpl(Context context) {
         mReviewPage = 1;
         mIsLoading = false;
-        mMovieDatabase = MovieDatabase.getInstance(context);
+        mMovieDatabase = MovieDatabase.getInstance(context.getApplicationContext());
+
     }
 
     @Override
@@ -121,9 +122,15 @@ public class MovieDetailPresenterImpl implements MovieDetailContract.Presenter {
 
     @Override
     public void onFabFavoriteClick(Movie movie) {
-        Log.d("ahihi","o day ");
         if (movie.getFavorite() == Constants.FAVORITE_NON_ACTIVE) {
             mView.showFavorite();
+            movie.setFavorite(Constants.FAVORITE_ACTIVE);
+            AppExecutors.getInstance().diskIO().execute(new Runnable() {
+                @Override
+                public void run() {
+                    mMovieDatabase.movieDAO().insert(movie);
+                }
+            });
         } else {
             mView.showUnFavorite();
         }

@@ -21,6 +21,7 @@ public class MoviesListActivity extends AppCompatActivity implements MoviesListF
 
     @BindView(R.id.toolbar)
     Toolbar mToolBar;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -41,8 +42,7 @@ public class MoviesListActivity extends AppCompatActivity implements MoviesListF
                             .replace(R.id.fragment_movies_list, moviesListFragment)
                             .commit();
                 }
-            }
-            else if (extras.containsKey(Constants.GENRE)) {
+            } else if (extras.containsKey(Constants.GENRE)) {
                 Genre genre = extras.getParcelable(Constants.GENRE);
                 if (genre != null) {
                     initToolbar(genre.getName());
@@ -53,8 +53,13 @@ public class MoviesListActivity extends AppCompatActivity implements MoviesListF
                 }
             }
         }
-
-
+        else {
+            initToolbar("Detail");
+            MoviesListFragment moviesListFragment = new MoviesListFragment();
+            getSupportFragmentManager().beginTransaction()
+                    .replace(R.id.fragment_movies_list, moviesListFragment)
+                    .commit();
+        }
     }
 
     private void initToolbar(String title) {

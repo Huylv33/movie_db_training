@@ -104,4 +104,9 @@ public class MoviesListPresenterImpl implements MoviesListContract.Presenter {
             fetchMoviesByGenre(genreId);
         }
     }
+
+    @Override
+    public void showFavoriteMovie() {
+
+    }
 }

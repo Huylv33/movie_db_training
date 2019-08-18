@@ -33,9 +33,9 @@ public class Movie implements Parcelable {
     @ColumnInfo(name = "overview")
     @SerializedName("overview")
     private String mOverview;
-    @ColumnInfo(name = "mFavorite")
+    @ColumnInfo(name = "favorite")
     private int mFavorite;
-    @ColumnInfo(name = "mWatchList")
+    @ColumnInfo(name = "watch_list")
     private int mWatchList;
 
     public Movie() {

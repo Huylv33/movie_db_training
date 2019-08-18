@@ -15,6 +15,7 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import com.google.android.material.navigation.NavigationView;
 import com.project.mobile.movie_db_training.detail.MovieDetailActivity;
 import com.project.mobile.movie_db_training.genre.GenresListActivity;
+import com.project.mobile.movie_db_training.list.MoviesListActivity;
 import com.project.mobile.movie_db_training.utils.Constants;
 import com.project.mobile.movie_db_training.utils.IntentUtils;
 import com.project.mobile.movie_db_training.utils.Utils;
@@ -38,6 +39,7 @@ public class MainActivity extends AppCompatActivity
     CardView mCardUpComing;
     @BindView(R.id.card_latest)
     CardView mCardLatest;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -45,6 +47,13 @@ public class MainActivity extends AppCompatActivity
         initView();
         ButterKnife.bind(this);
         setListener();
+        NavigationView navigationView = findViewById(R.id.nav_view);
+        navigationView.setNavigationItemSelectedListener(menuItem -> {
+            if (menuItem.getItemId() == R.id.nav_favorite) {
+                startActivity(new Intent(this, MoviesListActivity.class));
+            }
+            return  false;
+        });
     }
 
     private void setListener() {

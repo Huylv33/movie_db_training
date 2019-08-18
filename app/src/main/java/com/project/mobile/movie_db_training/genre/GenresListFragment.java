@@ -43,7 +43,6 @@ public class GenresListFragment extends Fragment implements GenresListContract.V
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        super.onAttach(context);
         if (context instanceof Callback) {
             mCallback = (Callback) context;
         }

@@ -3,6 +3,7 @@ package com.project.mobile.movie_db_training.list;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,11 +13,14 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.google.android.material.snackbar.Snackbar;
 import com.project.mobile.movie_db_training.R;
+import com.project.mobile.movie_db_training.data.local.MovieDatabase;
 import com.project.mobile.movie_db_training.data.model.Genre;
 import com.project.mobile.movie_db_training.data.model.Movie;
+import com.project.mobile.movie_db_training.utils.AppExecutors;
 import com.project.mobile.movie_db_training.utils.Constants;
 
 import java.util.ArrayList;
@@ -32,6 +36,8 @@ import butterknife.Unbinder;
 public class MoviesListFragment extends Fragment implements MoviesListContract.View {
     @BindView(R.id.rv_movies_list)
     RecyclerView mMoviesListRv;
+    @BindView(R.id.swipe_refresh)
+    SwipeRefreshLayout mSwipeRefreshLayout;
     private static final String TAG = MoviesListFragment.class.getSimpleName();
     private MoviesListAdapter mAdapter;
     private Unbinder mUnbinder;
@@ -40,6 +46,7 @@ public class MoviesListFragment extends Fragment implements MoviesListContract.V
     private String mListType;
     private Genre mGenre;
     private Callback mCallback;
+    private MovieDatabase mMovieDatabase;
 
     public MoviesListFragment() {
         // Required empty public constructor
@@ -82,8 +89,7 @@ public class MoviesListFragment extends Fragment implements MoviesListContract.V
         if (getArguments() != null) {
             if (getArguments().containsKey(Constants.LIST_TYPE)) {
                 mListType = getArguments().getString(Constants.LIST_TYPE);
-            }
-            else if (getArguments().containsKey(Constants.GENRE)){
+            } else if (getArguments().containsKey(Constants.GENRE)) {
                 mGenre = getArguments().getParcelable(Constants.GENRE);
             }
         }
@@ -95,12 +101,42 @@ public class MoviesListFragment extends Fragment implements MoviesListContract.V
         super.onViewCreated(view, savedInstanceState);
         mPresenter = new MoviesListPresenterImpl();
         mPresenter.setView(this);
+        if (savedInstanceState != null) {
+            mMovies = savedInstanceState.getParcelableArrayList(Constants.MOVIE);
+            showMovies(mMovies);
+        }
         if (mListType != null) mPresenter.fetchMovies(mListType);
         else if (mGenre != null) mPresenter.fetchMoviesByGenre(mGenre.getId());
+        else {
+            mMovieDatabase = MovieDatabase.getInstance(getActivity().getApplicationContext());
+            AppExecutors.getInstance().diskIO().execute(new Runnable() {
+                @Override
+                public void run() {
+                    final List<Movie> movies = mMovieDatabase.movieDAO().getFavorites();
+                    showMovies(movies);
+                }
+            });
+        }
+
     }
 
     private void initLayout() {
         LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
+        mSwipeRefreshLayout.setOnRefreshListener(() -> {
+            if (mListType != null) mPresenter.fetchMovies(mListType);
+            else if (mGenre != null) mPresenter.fetchMoviesByGenre(mGenre.getId());
+            else {
+                mMovieDatabase = MovieDatabase.getInstance(getActivity().getApplicationContext());
+                AppExecutors.getInstance().diskIO().execute(new Runnable() {
+                    @Override
+                    public void run() {
+                        final List<Movie> movies = mMovieDatabase.movieDAO().getFavorites();
+                        showMovies(movies);
+                    }
+                });
+            }
+        });
+
         mMoviesListRv.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
             public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
@@ -109,7 +145,7 @@ public class MoviesListFragment extends Fragment implements MoviesListContract.V
                 int lastVisibleItem = layoutManager.findLastVisibleItemPosition();
                 if (totalItemCount - 1 == lastVisibleItem) {
                     if (mListType != null) mPresenter.loadMore(mListType);
-                    else  if (mGenre != null) mPresenter.loadMoreByGenre(mGenre.getId());
+                    else if (mGenre != null) mPresenter.loadMoreByGenre(mGenre.getId());
                 }
             }
         });
@@ -128,6 +164,7 @@ public class MoviesListFragment extends Fragment implements MoviesListContract.V
         this.mMovies.addAll(movies);
         mMoviesListRv.setVisibility(View.VISIBLE);
         mAdapter.notifyDataSetChanged();
+        mSwipeRefreshLayout.setRefreshing(false);
     }
 
     @Override
@@ -138,6 +175,17 @@ public class MoviesListFragment extends Fragment implements MoviesListContract.V
     @Override
     public void loadingFail(String error) {
         Snackbar.make(mMoviesListRv, error, Snackbar.LENGTH_SHORT).show();
+    }
+//    @Override
+//    public void onSaveInstanceState(Bundle outState) {
+//        super.onSaveInstanceState(outState);
+//        outState.putParcelableArrayList(Constants.MOVIE, (ArrayList<? extends Parcelable>) movies);
+//    }
+
+    @Override
+    public void onSaveInstanceState(@NonNull Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putParcelableArrayList(Constants.MOVIE, (ArrayList<? extends Parcelable>) mMovies);
     }
 
     @Override
