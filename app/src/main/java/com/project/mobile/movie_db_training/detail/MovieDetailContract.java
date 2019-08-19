@@ -27,5 +27,7 @@ public class MovieDetailContract {
         void fetchReviews(String movieId);
 
         void loadMoreReviews(String movieId);
+
+        void fetchLatestMovie();
     }
 }

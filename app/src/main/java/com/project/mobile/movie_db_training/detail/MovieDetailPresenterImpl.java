@@ -3,6 +3,7 @@ package com.project.mobile.movie_db_training.detail;
 import androidx.annotation.NonNull;
 
 import com.project.mobile.movie_db_training.BuildConfig;
+import com.project.mobile.movie_db_training.data.model.Movie;
 import com.project.mobile.movie_db_training.data.model.Review;
 import com.project.mobile.movie_db_training.data.model.ReviewResponse;
 import com.project.mobile.movie_db_training.data.model.Video;
@@ -23,6 +24,32 @@ public class MovieDetailPresenterImpl implements MovieDetailContract.Presenter {
     private int mTotalReviewPage;
 
     @Override
+    public void fetchLatestMovie() {
+        NetworkModule.getTMDbService().getLatestMovie(BuildConfig.TMDB_API_KEY)
+                .enqueue(new Callback<Movie>() {
+                    @Override
+                    public void onResponse(Call<Movie> call, Response<Movie> response) {
+                        if (response.isSuccessful() && response.body() != null) {
+                            onFetchLatestMovieSuccess(response.body());
+                        } else {
+                            onFetchFail(Constants.RESPONSE_ERROR);
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<Movie> call, Throwable t) {
+                        onFetchFail(t.getMessage());
+                    }
+                });
+    }
+
+    private void onFetchLatestMovieSuccess(@NonNull Movie movie) {
+        mView.showInfo(movie);
+        fetchVideos(movie.getId());
+        fetchReviews(movie.getId());
+    }
+
+    @Override
     public void fetchVideos(String movieId) {
         NetworkModule.getTMDbService().getVideos(movieId, BuildConfig.TMDB_API_KEY)
                 .enqueue(new Callback<VideoResponse>() {
@@ -30,6 +57,8 @@ public class MovieDetailPresenterImpl implements MovieDetailContract.Presenter {
                     public void onResponse(Call<VideoResponse> call, Response<VideoResponse> response) {
                         if (response.isSuccessful() && response.body() != null) {
                             onFetchVideosSuccess(response.body().getVideos());
+                        } else {
+                            onFetchFail(Constants.RESPONSE_ERROR);
                         }
                     }
 
@@ -55,6 +84,8 @@ public class MovieDetailPresenterImpl implements MovieDetailContract.Presenter {
                     public void onResponse(Call<ReviewResponse> call, Response<ReviewResponse> response) {
                         if (response.isSuccessful() && response.body() != null) {
                             onFetchReviewsSuccess(response.body());
+                        } else {
+                            onFetchFail(Constants.RESPONSE_ERROR);
                         }
                     }
 

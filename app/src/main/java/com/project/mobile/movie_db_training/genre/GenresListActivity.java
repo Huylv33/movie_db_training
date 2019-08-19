@@ -34,6 +34,9 @@ public class GenresListActivity extends AppCompatActivity implements GenresListF
             ab.setDisplayHomeAsUpEnabled(true);
             ab.setTitle(Constants.GENRES_TITLE_BAR);
         }
+        mToolbar.setNavigationOnClickListener(view -> {
+            finish();
+        });
     }
 
     @Override

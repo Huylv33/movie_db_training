@@ -13,6 +13,7 @@ import androidx.cardview.widget.CardView;
 import androidx.drawerlayout.widget.DrawerLayout;
 
 import com.google.android.material.navigation.NavigationView;
+import com.project.mobile.movie_db_training.detail.MovieDetailActivity;
 import com.project.mobile.movie_db_training.genre.GenresListActivity;
 import com.project.mobile.movie_db_training.utils.Constants;
 import com.project.mobile.movie_db_training.utils.Utils;
@@ -33,6 +34,8 @@ public class MainActivity extends AppCompatActivity
     CardView mCardTopRated;
     @BindView(R.id.card_upcoming)
     CardView mCardUpComing;
+    @BindView(R.id.card_latest)
+    CardView mCardLatest;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,6 +47,10 @@ public class MainActivity extends AppCompatActivity
     }
 
     private void setListener() {
+        mCardLatest.setOnClickListener(view -> {
+            Intent intent = new Intent(this, MovieDetailActivity.class);
+            startActivity(intent);
+        });
         mCardGenre.setOnClickListener(view -> {
             Intent intent = new Intent(this, GenresListActivity.class);
             startActivity(intent);

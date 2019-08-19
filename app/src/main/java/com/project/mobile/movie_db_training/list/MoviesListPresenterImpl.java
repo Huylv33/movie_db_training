@@ -60,6 +60,8 @@ public class MoviesListPresenterImpl implements MoviesListContract.Presenter {
                     public void onResponse(Call<MovieResponse> call, Response<MovieResponse> response) {
                         if (response.isSuccessful() && response.body() != null) {
                             onFetchSuccess(response.body());
+                        } else {
+                           onFetchFail(Constants.RESPONSE_ERROR);
                         }
                     }
 
@@ -83,6 +85,8 @@ public class MoviesListPresenterImpl implements MoviesListContract.Presenter {
                     public void onResponse(Call<MovieResponse> call, Response<MovieResponse> response) {
                         if (response.isSuccessful() && response.body() != null) {
                             onFetchSuccess(response.body());
+                        } else {
+                            onFetchFail(Constants.RESPONSE_ERROR);
                         }
                     }
 
