@@ -8,6 +8,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
 import com.project.mobile.movie_db_training.R;
+import com.project.mobile.movie_db_training.data.model.Genre;
 import com.project.mobile.movie_db_training.data.model.Movie;
 import com.project.mobile.movie_db_training.detail.MovieDetailActivity;
 import com.project.mobile.movie_db_training.utils.Constants;
@@ -27,17 +28,21 @@ public class MoviesListActivity extends AppCompatActivity implements MoviesListF
         setContentView(R.layout.activity_movies_list);
         ButterKnife.bind(this);
         Intent intent = getIntent();
-        if (intent == null) {
-            return;
-        }
-        String listType = intent.getStringExtra(Constants.LIST_TYPE);
-        if (listType != null) {
+        if (intent == null || intent.getExtras() == null) return;
+        Bundle extras = intent.getExtras();
+        MoviesListFragment moviesListFragment;
+        if (extras.containsKey(Constants.LIST_TYPE)) {
+            String listType = extras.getString(Constants.LIST_TYPE);
             initToolbar(Utils.getTitleFromListType(listType));
-            MoviesListFragment moviesListFragment = MoviesListFragment.newInstance(listType);
-            getSupportFragmentManager().beginTransaction()
-                    .replace(R.id.fragment_movies_list, moviesListFragment)
-                    .commit();
+            moviesListFragment = MoviesListFragment.newInstance(listType);
+        } else {
+            Genre genre = extras.getParcelable(Constants.GENRE);
+            initToolbar(genre.getName());
+            moviesListFragment = MoviesListFragment.newInstance(genre);
         }
+        getSupportFragmentManager().beginTransaction()
+                .replace(R.id.fragment_movies_list, moviesListFragment)
+                .commit();
     }
 
     private void initToolbar(String title) {
@@ -47,6 +52,9 @@ public class MoviesListActivity extends AppCompatActivity implements MoviesListF
             ab.setDisplayHomeAsUpEnabled(true);
             ab.setTitle(title);
         }
+        mToolBar.setNavigationOnClickListener(view -> {
+            finish();
+        });
     }
 
     @Override
