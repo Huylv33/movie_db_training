@@ -82,13 +82,8 @@ public class GenresListFragment extends Fragment implements GenresListContract.V
     }
 
     @Override
-    public void loadingStart() {
-        Snackbar.make(mGenresListRv, "Loading genres", Snackbar.LENGTH_SHORT).show();
-    }
-
-    @Override
-    public void loadingFail(String error) {
-        Snackbar.make(mGenresListRv, error, Snackbar.LENGTH_INDEFINITE).show();
+    public void showLoading(String message) {
+        Snackbar.make(mGenresListRv, message, Snackbar.LENGTH_LONG);
     }
 
     @Override

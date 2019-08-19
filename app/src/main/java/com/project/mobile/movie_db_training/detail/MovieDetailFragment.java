@@ -90,9 +90,9 @@ public class MovieDetailFragment extends Fragment implements MovieDetailContract
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        mPresenter = new MovieDetailPresenterImpl();
+        mPresenter.setView(this);
         if (getArguments() != null) {
-            mPresenter = new MovieDetailPresenterImpl();
-            mPresenter.setView(this);
             Movie movie = getArguments().getParcelable(Constants.MOVIE_KEY);
             if (movie != null) {
                 mMovie = movie;
@@ -100,6 +100,9 @@ public class MovieDetailFragment extends Fragment implements MovieDetailContract
                 mPresenter.fetchVideos(mMovie.getId());
                 mPresenter.fetchReviews(mMovie.getId());
             }
+        } else {
+            // get latest movie
+            mPresenter.fetchLatestMovie();
         }
     }
 
@@ -173,6 +176,7 @@ public class MovieDetailFragment extends Fragment implements MovieDetailContract
     public void showReviews(@NonNull List<Review> reviews) {
         mReviewTitle.setText(String.format(getString(R.string.review), reviews.size()));
         if (reviews.size() > 0) {
+            mReviews.clear();
             mReviews.addAll(reviews);
             mReviewsRv.setVisibility(View.VISIBLE);
             mReviewsAdapter.notifyDataSetChanged();
@@ -193,7 +197,7 @@ public class MovieDetailFragment extends Fragment implements MovieDetailContract
 
     @Override
     public void showLoading(String message) {
-        if (getView() != null) Snackbar.make(getView(),message,Snackbar.LENGTH_SHORT).show();
+        if (getView() != null) Snackbar.make(getView(), message, Snackbar.LENGTH_SHORT).show();
     }
 
     @Override

@@ -20,13 +20,17 @@ public class MovieDetailActivity extends AppCompatActivity {
             return;
         }
         Bundle extras = intent.getExtras();
+        MovieDetailFragment movieDetailFragment;
         if (extras != null && extras.containsKey(Constants.MOVIE_KEY)) {
             Movie movie = extras.getParcelable(Constants.MOVIE_KEY);
-            MovieDetailFragment movieDetailFragment = MovieDetailFragment.newInstance(movie);
-            getSupportFragmentManager()
-                    .beginTransaction()
-                    .replace(R.id.fragment_movie_detail, movieDetailFragment)
-                    .commit();
+            movieDetailFragment = MovieDetailFragment.newInstance(movie);
+        } else {
+            //latest movie
+            movieDetailFragment = new MovieDetailFragment();
         }
+        getSupportFragmentManager()
+                .beginTransaction()
+                .replace(R.id.fragment_movie_detail, movieDetailFragment)
+                .commit();
     }
 }

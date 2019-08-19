@@ -5,6 +5,7 @@ import com.project.mobile.movie_db_training.BuildConfig;
 import com.project.mobile.movie_db_training.data.model.Genre;
 import com.project.mobile.movie_db_training.data.model.GenresResponse;
 import com.project.mobile.movie_db_training.network.NetworkModule;
+import com.project.mobile.movie_db_training.utils.Constants;
 
 import java.util.List;
 
@@ -27,7 +28,7 @@ public class GenresListPresenterImpl implements GenresListContract.Presenter {
 
     @Override
     public void fetchGenres() {
-        mGenresListView.loadingStart();
+        mGenresListView.showLoading(Constants.LOADING_START);
         NetworkModule.getTMDbService()
                 .getGenreList(BuildConfig.TMDB_API_KEY)
                 .enqueue(new Callback<GenresResponse>() {
@@ -35,17 +36,23 @@ public class GenresListPresenterImpl implements GenresListContract.Presenter {
                     public void onResponse(Call<GenresResponse> call, Response<GenresResponse> response) {
                         if (response.body() != null && response.isSuccessful()) {
                             onFetchSuccess(response.body().getGenres());
+                        } else {
+                            onFetchFail(Constants.RESPONSE_ERROR);
                         }
                     }
 
                     @Override
                     public void onFailure(Call<GenresResponse> call, Throwable t) {
-                        mGenresListView.loadingFail(t.getMessage());
+                        onFetchFail(t.getMessage());
                     }
                 });
     }
 
     private void onFetchSuccess(List<Genre> genres) {
         mGenresListView.showGenres(genres);
+    }
+
+    private void onFetchFail(String message) {
+        mGenresListView.showLoading(message);
     }
 }

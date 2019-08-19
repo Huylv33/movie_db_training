@@ -9,9 +9,7 @@ public interface GenresListContract {
     interface View {
         void showGenres(List<Genre> genresList);
 
-        void loadingStart();
-
-        void loadingFail(String error);
+        void showLoading(String message);
     }
 
     interface Presenter {
