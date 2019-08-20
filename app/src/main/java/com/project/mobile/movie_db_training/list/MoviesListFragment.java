@@ -88,7 +88,7 @@ public class MoviesListFragment extends Fragment implements MoviesListContract.V
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        mPresenter = new MoviesListPresenterImpl();
+        mPresenter = new MoviesListPresenterImpl(getContext());
         mPresenter.setView(this);
         mPresenter.fetchMovies(mOption);
     }

@@ -15,6 +15,8 @@ public class MovieDetailContract {
         void showReviews(List<Review> reviews);
 
         void showLoading(String message);
+
+        void showFavoriteButton(int status);
     }
 
     interface Presenter {
@@ -29,5 +31,9 @@ public class MovieDetailContract {
         void loadMoreReviews(String movieId);
 
         void fetchLatestMovie();
+
+        void onFabFavoriteClick(Movie movie);
+
+        void showFavorite(String movieId);
     }
 }

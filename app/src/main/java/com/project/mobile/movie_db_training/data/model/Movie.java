@@ -19,6 +19,9 @@ public class Movie implements Parcelable {
     @SerializedName("overview")
     private String mOverview;
 
+    public Movie() {
+    }
+
     protected Movie(Parcel in) {
         this.mId = in.readString();
         this.mTitle = in.readString();
@@ -52,23 +55,40 @@ public class Movie implements Parcelable {
         return mTitle;
     }
 
+    public void setTitle(String title) {
+        mTitle = title;
+    }
 
     public String getVoteAverage() {
         return mVoteAverage;
     }
 
+    public void setVoteAverage(String voteAverage) {
+        mVoteAverage = voteAverage;
+    }
 
     public String getBackdropPath() {
         return mBackdropPath;
     }
 
+    public void setBackdropPath(String backdropPath) {
+        mBackdropPath = backdropPath;
+    }
 
     public String getReleaseDate() {
         return mReleaseDate;
     }
 
+    public void setReleaseDate(String releaseDate) {
+        mReleaseDate = releaseDate;
+    }
+
     public String getOverview() {
         return mOverview;
+    }
+
+    public void setOverview(String overview) {
+        mOverview = overview;
     }
 
     @Override

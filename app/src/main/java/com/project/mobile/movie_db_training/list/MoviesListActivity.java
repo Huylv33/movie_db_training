@@ -28,17 +28,23 @@ public class MoviesListActivity extends AppCompatActivity implements MoviesListF
         setContentView(R.layout.activity_movies_list);
         ButterKnife.bind(this);
         Intent intent = getIntent();
-        if (intent == null || intent.getExtras() == null) return;
+        if (intent == null) return;
         Bundle extras = intent.getExtras();
         MoviesListFragment moviesListFragment;
-        if (extras.containsKey(Constants.LIST_TYPE)) {
-            String listType = extras.getString(Constants.LIST_TYPE);
-            initToolbar(Utils.getTitleFromListType(listType));
-            moviesListFragment = MoviesListFragment.newInstance(listType);
+        if (extras != null) {
+            if (extras.containsKey(Constants.LIST_TYPE)) {
+                String listType = extras.getString(Constants.LIST_TYPE);
+                initToolbar(Utils.getTitleFromListType(listType));
+                moviesListFragment = MoviesListFragment.newInstance(listType);
+            } else {
+                Genre genre = extras.getParcelable(Constants.GENRE);
+                initToolbar(genre.getName());
+                moviesListFragment = MoviesListFragment.newInstance(genre);
+            }
         } else {
-            Genre genre = extras.getParcelable(Constants.GENRE);
-            initToolbar(genre.getName());
-            moviesListFragment = MoviesListFragment.newInstance(genre);
+            // hien thi local
+            initToolbar(Constants.FAVORITES);
+            moviesListFragment = new MoviesListFragment();
         }
         getSupportFragmentManager().beginTransaction()
                 .replace(R.id.fragment_movies_list, moviesListFragment)
