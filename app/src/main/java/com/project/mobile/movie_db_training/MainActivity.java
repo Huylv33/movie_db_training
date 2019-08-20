@@ -15,6 +15,7 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import com.google.android.material.navigation.NavigationView;
 import com.project.mobile.movie_db_training.detail.MovieDetailActivity;
 import com.project.mobile.movie_db_training.genre.GenresListActivity;
+import com.project.mobile.movie_db_training.list.MoviesListActivity;
 import com.project.mobile.movie_db_training.utils.Constants;
 import com.project.mobile.movie_db_training.utils.Utils;
 
@@ -36,7 +37,8 @@ public class MainActivity extends AppCompatActivity
     CardView mCardUpComing;
     @BindView(R.id.card_latest)
     CardView mCardLatest;
-
+    @BindView(R.id.nav_view)
+    NavigationView mNavigationView;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -47,6 +49,12 @@ public class MainActivity extends AppCompatActivity
     }
 
     private void setListener() {
+        mNavigationView.setNavigationItemSelectedListener(menuItem -> {
+            if (menuItem.getItemId() == R.id.nav_favorite) {
+                startActivity(new Intent(this, MoviesListActivity.class));
+            }
+            return false;
+        });
         mCardLatest.setOnClickListener(view -> {
             Intent intent = new Intent(this, MovieDetailActivity.class);
             startActivity(intent);

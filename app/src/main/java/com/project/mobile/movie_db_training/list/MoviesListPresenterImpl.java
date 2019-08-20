@@ -1,11 +1,19 @@
 package com.project.mobile.movie_db_training.list;
 
+import android.content.Context;
+
 import androidx.annotation.NonNull;
 
 import com.project.mobile.movie_db_training.BuildConfig;
+import com.project.mobile.movie_db_training.data.local.MovieDatabase;
+import com.project.mobile.movie_db_training.data.model.FavoriteEntity;
+import com.project.mobile.movie_db_training.data.model.Movie;
 import com.project.mobile.movie_db_training.data.model.MovieResponse;
 import com.project.mobile.movie_db_training.network.NetworkModule;
 import com.project.mobile.movie_db_training.utils.Constants;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -17,6 +25,12 @@ public class MoviesListPresenterImpl implements MoviesListContract.Presenter {
     private boolean mIsLoading = false;
     private int mTotalPages;
     private int mPage = 1;
+    private MovieDatabase mMovieDatabase;
+    private List<Movie> mMovies = new ArrayList<>();
+
+    public MoviesListPresenterImpl(Context context) {
+        mMovieDatabase = MovieDatabase.getInstance(context);
+    }
 
     public int getTotalPages() {
         return mTotalPages;
@@ -38,7 +52,14 @@ public class MoviesListPresenterImpl implements MoviesListContract.Presenter {
 
     @Override
     public void fetchMovies(String option) {
-        if (option.equals(Constants.NOW_PLAYING) ||
+        if (option == null) {
+            //get local
+            List<FavoriteEntity> favorites = mMovieDatabase.favoritesDao().getAll();
+            for (int i = 0; i < favorites.size(); i++) {
+                mMovies.add(favoriteEntityToMovie(favorites.get(i)));
+            }
+            mView.showMovies(mMovies);
+        } else if (option.equals(Constants.NOW_PLAYING) ||
                 option.equals(Constants.POPULAR) ||
                 option.equals(Constants.TOP_RATED) ||
                 option.equals(Constants.UPCOMING)) {
@@ -61,7 +82,7 @@ public class MoviesListPresenterImpl implements MoviesListContract.Presenter {
                         if (response.isSuccessful() && response.body() != null) {
                             onFetchSuccess(response.body());
                         } else {
-                           onFetchFail(Constants.RESPONSE_ERROR);
+                            onFetchFail(Constants.RESPONSE_ERROR);
                         }
                     }
 
@@ -106,6 +127,17 @@ public class MoviesListPresenterImpl implements MoviesListContract.Presenter {
 
     private void onFetchFail(String message) {
         mView.showLoading(message);
+    }
+
+    private Movie favoriteEntityToMovie(FavoriteEntity favoriteEntity) {
+        Movie movie = new Movie();
+        movie.setId(favoriteEntity.getId());
+        movie.setBackdropPath(favoriteEntity.getBackdropPath());
+        movie.setTitle(favoriteEntity.getTitle());
+        movie.setReleaseDate(favoriteEntity.getReleaseDate());
+        movie.setOverview(favoriteEntity.getOverview());
+        movie.setVoteAverage(favoriteEntity.getVoteAverage());
+        return movie;
     }
 
     @Override

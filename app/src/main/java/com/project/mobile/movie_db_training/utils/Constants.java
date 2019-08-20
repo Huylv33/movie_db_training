@@ -27,4 +27,6 @@ public class Constants {
     public static final int MAX_LINE_REVIEW = 5;
     public static final String LOADING_START = "Loading...";
     public static final String RESPONSE_ERROR = "An error occurs";
+    public static final String FAVORITES = "FavoriteEntity";
+    public static final String WATCH_LIST = "Watch List";
 }

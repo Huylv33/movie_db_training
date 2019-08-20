@@ -23,6 +23,7 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 import com.project.mobile.movie_db_training.R;
 import com.project.mobile.movie_db_training.data.model.Movie;
@@ -59,6 +60,8 @@ public class MovieDetailFragment extends Fragment implements MovieDetailContract
     TextView mReviewTitle;
     @BindView(R.id.rv_reviews)
     RecyclerView mReviewsRv;
+    @BindView(R.id.fab_favorite)
+    FloatingActionButton mFabFavorite;
     private ReviewsListAdapter mReviewsAdapter;
     private Unbinder mUnbinder;
     private Movie mMovie;
@@ -83,6 +86,7 @@ public class MovieDetailFragment extends Fragment implements MovieDetailContract
         View rootView = inflater.inflate(R.layout.fragment_movie_detail, container, false);
         mUnbinder = ButterKnife.bind(this, rootView);
         setToolbar();
+        setFloatButtonListener();
         initReviewsLayout();
         return rootView;
     }
@@ -90,13 +94,15 @@ public class MovieDetailFragment extends Fragment implements MovieDetailContract
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        mPresenter = new MovieDetailPresenterImpl();
+        if (getContext() == null) return;
+        mPresenter = new MovieDetailPresenterImpl(getContext());
         mPresenter.setView(this);
         if (getArguments() != null) {
             Movie movie = getArguments().getParcelable(Constants.MOVIE_KEY);
             if (movie != null) {
                 mMovie = movie;
                 showInfo(mMovie);
+                mPresenter.showFavorite(mMovie.getId());
                 mPresenter.fetchVideos(mMovie.getId());
                 mPresenter.fetchReviews(mMovie.getId());
             }
@@ -134,6 +140,12 @@ public class MovieDetailFragment extends Fragment implements MovieDetailContract
         mReviewsRv.setLayoutManager(linearLayoutManager);
         mReviewsAdapter = new ReviewsListAdapter(mReviews);
         mReviewsRv.setAdapter(mReviewsAdapter);
+    }
+
+    private void setFloatButtonListener() {
+        mFabFavorite.setOnClickListener(view1 -> {
+            onFabFavoriteClick();
+        });
     }
 
     @Override
@@ -195,9 +207,21 @@ public class MovieDetailFragment extends Fragment implements MovieDetailContract
         }
     }
 
+    private void onFabFavoriteClick() {
+        mPresenter.onFabFavoriteClick(mMovie);
+    }
+
     @Override
     public void showLoading(String message) {
         if (getView() != null) Snackbar.make(getView(), message, Snackbar.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void showFavoriteButton(int status) {
+        mFabFavorite.setImageDrawable(getResources().getDrawable(
+                status == Constants.FAVORITE_ACTIVE ?
+                        R.drawable.ic_favorite_active_24dp : R.drawable.ic_favorite_black_24dp
+        ));
     }
 
     @Override

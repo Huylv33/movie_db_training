@@ -1,8 +1,12 @@
 package com.project.mobile.movie_db_training.detail;
 
+import android.content.Context;
+
 import androidx.annotation.NonNull;
 
 import com.project.mobile.movie_db_training.BuildConfig;
+import com.project.mobile.movie_db_training.data.local.MovieDatabase;
+import com.project.mobile.movie_db_training.data.model.FavoriteEntity;
 import com.project.mobile.movie_db_training.data.model.Movie;
 import com.project.mobile.movie_db_training.data.model.Review;
 import com.project.mobile.movie_db_training.data.model.ReviewResponse;
@@ -22,6 +26,12 @@ public class MovieDetailPresenterImpl implements MovieDetailContract.Presenter {
     private boolean mIsLoading;
     private int mReviewPage = 1;
     private int mTotalReviewPage;
+    private MovieDatabase mMovieDatabase;
+    private boolean mIsFavorite;
+
+    public MovieDetailPresenterImpl(Context context) {
+        mMovieDatabase = MovieDatabase.getInstance(context);
+    }
 
     @Override
     public void fetchLatestMovie() {
@@ -45,6 +55,7 @@ public class MovieDetailPresenterImpl implements MovieDetailContract.Presenter {
 
     private void onFetchLatestMovieSuccess(@NonNull Movie movie) {
         mView.showInfo(movie);
+        showFavorite(movie.getId());
         fetchVideos(movie.getId());
         fetchReviews(movie.getId());
     }
@@ -112,6 +123,31 @@ public class MovieDetailPresenterImpl implements MovieDetailContract.Presenter {
 
     private void onFetchFail(String message) {
         mView.showLoading(message);
+    }
+
+    private boolean isFavorite(String movieId) {
+        return mMovieDatabase.favoritesDao().getById(movieId) != null;
+    }
+
+    @Override
+    public void onFabFavoriteClick(Movie movie) {
+        FavoriteEntity favoriteEntity = new FavoriteEntity(movie);
+        if (!isFavorite(movie.getId())) {
+            mMovieDatabase.favoritesDao().insert(favoriteEntity);
+            mView.showFavoriteButton(Constants.FAVORITE_ACTIVE);
+        } else {
+            mMovieDatabase.favoritesDao().deleteById(favoriteEntity.getId());
+            mView.showFavoriteButton(Constants.FAVORITE_NON_ACTIVE);
+        }
+    }
+
+    @Override
+    public void showFavorite(String movieId) {
+        if (isFavorite(movieId)) {
+            mView.showFavoriteButton(Constants.FAVORITE_ACTIVE);
+        } else {
+            mView.showFavoriteButton(Constants.FAVORITE_NON_ACTIVE);
+        }
     }
 
     @Override
