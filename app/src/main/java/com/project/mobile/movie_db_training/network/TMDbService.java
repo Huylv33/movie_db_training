@@ -35,4 +35,8 @@ public interface TMDbService {
 
     @GET("movie/latest?language=en-US")
     Call<Movie> getLatestMovie(@Query("api_key") String key);
+
+    @GET("search/movie?language=en-US&page=1")
+    Call<MovieResponse> searchMovies(@Query("query") String searchQuery,@Query("api_key") String key);
+    
 }

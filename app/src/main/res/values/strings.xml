@@ -21,4 +21,11 @@
     <string name="overview">Overview</string>
     <string name="review">Review (%d)</string>
     <string name="video">Video</string>
+    <string name="see_all">SEE ALL</string>
+    <string name="hot_trailer">Hot Trailer</string>
+    <string name="menu_discover">Discover</string>
+    <string name="menu_setting">Setting</string>
+    <string name="menu_share">Share</string>
+    <string name="menu_feedback">Send Feedback</string>
+    <string name="menu_about">About</string>
 </resources>

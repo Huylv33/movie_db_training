@@ -33,7 +33,7 @@ public class MoviesListFragment extends Fragment implements MoviesListContract.V
     @BindView(R.id.rv_movies_list)
     RecyclerView mMoviesListRv;
     private static final String TAG = MoviesListFragment.class.getSimpleName();
-    private MoviesListAdapter mAdapter;
+    private MoviesListDetailAdapter mAdapter;
     private Unbinder mUnbinder;
     private List<Movie> mMovies = new ArrayList<>();
     private MoviesListPresenterImpl mPresenter;
@@ -107,7 +107,7 @@ public class MoviesListFragment extends Fragment implements MoviesListContract.V
             }
         });
         mMoviesListRv.setLayoutManager(layoutManager);
-        mAdapter = new MoviesListAdapter(mMovies, mCallback);
+        mAdapter = new MoviesListDetailAdapter(mMovies, mCallback);
         mMoviesListRv.setAdapter(mAdapter);
     }
 
@@ -136,7 +136,7 @@ public class MoviesListFragment extends Fragment implements MoviesListContract.V
         mCallback = null;
     }
 
-    interface Callback {
+    public interface Callback {
         void onMovieClick(Movie movie);
     }
 }

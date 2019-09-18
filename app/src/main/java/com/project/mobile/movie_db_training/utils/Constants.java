@@ -13,6 +13,7 @@ public class Constants {
     public static final String TOP_RATED_TITLE_BAR = "Top Rated";
     public static final String NOW_PLAYING_TITLE_BAR = "Now Playing";
     public static final String IMAGE_BASE_URL = "https://image.tmdb.org/t/p/";
+    public static final String POSTER_BASE_URL = "https://image.tmdb.org/t/p/w342";
     public static final String MOVIE_KEY = "movie_key";
     public static final String DETAIL = "Detail";
     public static final String BASE_IMAGE_THUMB_URL = "https://img.youtube.com/vi/";
@@ -29,4 +30,5 @@ public class Constants {
     public static final String RESPONSE_ERROR = "An error occurs";
     public static final String FAVORITES = "FavoriteEntity";
     public static final String WATCH_LIST = "Watch List";
+    public static final String YOUTUTE_API_KEY = "AIzaSyCnShA82nnluMPxF9DaDBaOWyYiUfUadOU";
 }

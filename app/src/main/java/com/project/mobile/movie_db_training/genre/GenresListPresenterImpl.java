@@ -4,6 +4,7 @@ package com.project.mobile.movie_db_training.genre;
 import com.project.mobile.movie_db_training.BuildConfig;
 import com.project.mobile.movie_db_training.data.model.Genre;
 import com.project.mobile.movie_db_training.data.model.GenresResponse;
+import com.project.mobile.movie_db_training.data.model.MovieResponse;
 import com.project.mobile.movie_db_training.network.NetworkModule;
 import com.project.mobile.movie_db_training.utils.Constants;
 
@@ -35,7 +36,8 @@ public class GenresListPresenterImpl implements GenresListContract.Presenter {
                     @Override
                     public void onResponse(Call<GenresResponse> call, Response<GenresResponse> response) {
                         if (response.body() != null && response.isSuccessful()) {
-                            onFetchSuccess(response.body().getGenres());
+                            List<Genre> genres = response.body().getGenres();
+                            getImageOfGenres(genres);
                         } else {
                             onFetchFail(Constants.RESPONSE_ERROR);
                         }
@@ -47,7 +49,28 @@ public class GenresListPresenterImpl implements GenresListContract.Presenter {
                     }
                 });
     }
+    private void getImageOfGenres(List<Genre> genres){
+        for (Genre genre: genres) {
+            NetworkModule.getTMDbService()
+                    .getMoviesByGenre(BuildConfig.TMDB_API_KEY, genre.getId(), 1)
+                    .enqueue(new retrofit2.Callback<MovieResponse>() {
+                        @Override
+                        public void onResponse(Call<MovieResponse> call, Response<MovieResponse> response) {
+                            if (response.isSuccessful() && response.body() != null) {
+                                genre.setImageUrl(response.body().getMovies().get(0).getBackdropPath());
+                                onFetchSuccess(genres);
+                            } else {
+                                onFetchFail(Constants.RESPONSE_ERROR);
+                            }
+                        }
 
+                        @Override
+                        public void onFailure(Call<MovieResponse> call, Throwable t) {
+                            onFetchFail(t.getMessage());
+                        }
+                    });
+        }
+    }
     private void onFetchSuccess(List<Genre> genres) {
         mGenresListView.showGenres(genres);
     }
@@ -55,4 +78,5 @@ public class GenresListPresenterImpl implements GenresListContract.Presenter {
     private void onFetchFail(String message) {
         mGenresListView.showLoading(message);
     }
+
 }
