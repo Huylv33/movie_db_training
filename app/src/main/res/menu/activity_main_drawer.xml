@@ -1,15 +1,42 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
-    <item
-        android:id="@+id/nav_home"
-        android:icon="@drawable/ic_home_black_24dp"
-        android:title="@string/menu_home" />
-    <item
-        android:id="@+id/nav_favorite"
-        android:icon="@drawable/ic_favorite_black_24dp"
-        android:title="@string/menu_favorite" />
-    <item
-        android:id="@+id/nav_your_list"
-        android:icon="@drawable/ic_list_black_24dp"
-        android:title="@string/menu_list" />
+    <group
+        android:id="@+id/app_feature"
+        android:checkableBehavior="single">
+        <item
+            android:id="@+id/nav_home"
+            android:icon="@drawable/ic_home_black_24dp"
+            android:title="@string/menu_home" />
+        <item
+            android:id="@+id/nav_discover"
+            android:icon="@drawable/ic_discover_black_24dp"
+            android:title="@string/menu_discover" />
+        <item
+            android:id="@+id/nav_favorite"
+            android:icon="@drawable/ic_favorite_black_24dp"
+            android:title="@string/menu_favorite" />
+        <item
+            android:id="@+id/nav_your_list"
+            android:icon="@drawable/ic_list_black_24dp"
+            android:title="@string/menu_list" />
+        <item
+            android:id="@+id/nav_setting"
+            android:icon="@drawable/ic_settings_black_24dp"
+            android:title="@string/menu_setting" />
+    </group>
+    <group android:id="@+id/app_info">
+        <item
+            android:id="@+id/nav_share"
+            android:icon="@drawable/ic_share_black_24dp"
+            android:title="@string/menu_share" />
+        <item
+            android:id="@+id/nav_feedback"
+            android:icon="@drawable/ic_feedback_black_24dp"
+            android:title="@string/menu_feedback"
+            />
+        <item
+            android:id="@+id/nav_about"
+            android:icon="@drawable/ic_info_black_24dp"
+            android:title="@string/menu_about"/>
+    </group>
 </menu>

@@ -11,7 +11,7 @@ public class Genre implements Parcelable {
     private String mId;
     @SerializedName("name")
     private String mName;
-
+    private String imageUrl;
     protected Genre(Parcel i) {
         this.mId = i.readString();
         this.mName = i.readString();
@@ -29,12 +29,20 @@ public class Genre implements Parcelable {
         }
     };
 
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
+    }
+
     public String getId() {
         return mId;
     }
 
     public String getName() {
         return mName;
+    }
+
+    public String getImageUrl() {
+        return imageUrl;
     }
 
     @Override

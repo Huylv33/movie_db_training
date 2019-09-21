@@ -1,21 +1,32 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="150dp"
-    android:padding="@dimen/content_main_padding">
+    android:layout_height="122dp">
 
-    <androidx.cardview.widget.CardView xmlns:app="http://schemas.android.com/apk/res-auto"
+    <androidx.cardview.widget.CardView
         android:id="@+id/card_genre_detail"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/card_genre_height"
-        app:cardBackgroundColor="#0A6FEF">
+        android:layout_height="@dimen/card_genre_height">
 
-        <TextView
-            android:id="@+id/text_genre_name"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_margin="@dimen/card_textview_margin"
-            android:textColor="@color/color_white"
-            android:textSize="@dimen/genre_name_font_size" />
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <ImageView
+                android:id="@+id/image"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:scaleType="centerCrop" />
+
+            <TextView
+                android:id="@+id/text_genre_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/card_tv_margin"
+                android:gravity="top"
+                android:textColor="@color/color_white"
+                android:textSize="@dimen/genre_name_font_size" />
+        </FrameLayout>
+
     </androidx.cardview.widget.CardView>
 </LinearLayout>

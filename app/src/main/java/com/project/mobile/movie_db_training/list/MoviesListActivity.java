@@ -2,6 +2,7 @@ package com.project.mobile.movie_db_training.list;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.Menu;
 
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
@@ -74,5 +75,11 @@ public class MoviesListActivity extends AppCompatActivity implements MoviesListF
         extras.putParcelable(Constants.MOVIE_KEY, movie);
         intent.putExtras(extras);
         startActivity(intent);
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.list, menu);
+        return super.onCreateOptionsMenu(menu);
     }
 }

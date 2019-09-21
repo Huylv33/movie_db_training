@@ -1,8 +1,10 @@
 package com.project.mobile.movie_db_training.genre;
 
+import android.media.Image;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -11,6 +13,8 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.project.mobile.movie_db_training.R;
 import com.project.mobile.movie_db_training.data.model.Genre;
+import com.project.mobile.movie_db_training.utils.Constants;
+import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
@@ -41,6 +45,8 @@ public class GenresListAdapter extends
         holder.itemView.setOnClickListener(view -> {
             mCallback.onGenreClick(mGenreList.get(position));
         });
+        Picasso.get().load(Constants.IMAGE_BASE_URL + Constants.LARGE_IMAGE_WITDH_PATH
+                + mGenreList.get(position).getImageUrl()).into(holder.mGenreImage);
     }
 
     @Override
@@ -53,7 +59,8 @@ public class GenresListAdapter extends
         CardView mGenreCard;
         @BindView(R.id.text_genre_name)
         TextView mGenreText;
-
+        @BindView(R.id.image)
+        ImageView mGenreImage;
         public GenresListViewHolder(@NonNull android.view.View itemView) {
             super(itemView);
             ButterKnife.bind(this, itemView);

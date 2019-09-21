@@ -1,4 +1,4 @@
-package com.project.mobile.movie_db_training.list;
+package com.project.mobile.movie_db_training.main;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.project.mobile.movie_db_training.R;
 import com.project.mobile.movie_db_training.data.model.Movie;
+import com.project.mobile.movie_db_training.list.MoviesListFragment;
 import com.project.mobile.movie_db_training.utils.Constants;
 import com.squareup.picasso.Picasso;
 
@@ -19,26 +20,32 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class MoviesListAdapter extends RecyclerView.Adapter<MoviesListAdapter.ViewHolder> {
+public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.ViewHolder> {
     private List<Movie> mMovies;
     private MoviesListFragment.Callback mCallback;
 
-    public MoviesListAdapter(List<Movie> movies, MoviesListFragment.Callback callback) {
+    public MovieAdapter(List<Movie> movies, MoviesListFragment.Callback callback) {
         mMovies = movies;
         mCallback = callback;
     }
 
     @NonNull
     @Override
-    public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public MovieAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.movie_item_2, parent, false);
-        return new ViewHolder(view);
+        return new MovieAdapter.ViewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull MovieAdapter.ViewHolder holder, int position) {
         holder.bind(mMovies.get(position));
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mCallback.onMovieClick(mMovies.get(position));
+            }
+        });
     }
 
     @Override
@@ -51,7 +58,8 @@ public class MoviesListAdapter extends RecyclerView.Adapter<MoviesListAdapter.Vi
         ImageView poster;
         @BindView(R.id.movie_name)
         TextView name;
-
+        @BindView(R.id.movie_rating)
+        TextView rating;
         public Movie movie;
 
         public ViewHolder(View root) {
@@ -61,8 +69,9 @@ public class MoviesListAdapter extends RecyclerView.Adapter<MoviesListAdapter.Vi
 
         public void bind(Movie movie) {
             name.setText(movie.getTitle());
-            Picasso.get().load(Constants.IMAGE_BASE_URL + Constants.SMALL_IMAGE_WITDH_PATH
-                    + movie.getBackdropPath()).into(poster);
+            rating.setText(movie.getVoteAverage());
+            Picasso.get().load(Constants.POSTER_BASE_URL
+                    + movie.getPosterPath()).into(poster);
         }
     }
 }
