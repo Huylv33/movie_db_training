@@ -6,6 +6,7 @@ import androidx.annotation.NonNull;
 
 import com.project.mobile.movie_db_training.BuildConfig;
 import com.project.mobile.movie_db_training.data.local.MovieDatabase;
+import com.project.mobile.movie_db_training.data.model.CreditsResponse;
 import com.project.mobile.movie_db_training.data.model.FavoriteEntity;
 import com.project.mobile.movie_db_training.data.model.Movie;
 import com.project.mobile.movie_db_training.data.model.Review;
@@ -148,6 +149,24 @@ public class MovieDetailPresenterImpl implements MovieDetailContract.Presenter {
         } else {
             mView.showFavoriteButton(Constants.FAVORITE_NON_ACTIVE);
         }
+    }
+
+    @Override
+    public void fetchCast(String movieId) {
+        NetworkModule.getTMDbService().getCredits(movieId,BuildConfig.TMDB_API_KEY)
+                .enqueue(new Callback<CreditsResponse>() {
+                    @Override
+                    public void onResponse(Call<CreditsResponse> call, Response<CreditsResponse> response) {
+                        if (response.isSuccessful() && response.body() != null) {
+                            mView.showCast(response.body().getCast());
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<CreditsResponse> call, Throwable t) {
+
+                    }
+                });
     }
 
     @Override

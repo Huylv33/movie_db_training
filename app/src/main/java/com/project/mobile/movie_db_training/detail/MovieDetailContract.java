@@ -1,5 +1,6 @@
 package com.project.mobile.movie_db_training.detail;
 
+import com.project.mobile.movie_db_training.data.model.Cast;
 import com.project.mobile.movie_db_training.data.model.Movie;
 import com.project.mobile.movie_db_training.data.model.Review;
 import com.project.mobile.movie_db_training.data.model.Video;
@@ -14,6 +15,8 @@ public class MovieDetailContract {
 
         void showReviews(List<Review> reviews);
 
+        void showCast(List<Cast> casts);
+
         void showLoading(String message);
 
         void showFavoriteButton(int status);
@@ -25,6 +28,8 @@ public class MovieDetailContract {
         void destroy();
 
         void fetchVideos(String movieId);
+
+        void fetchCast(String movieId);
 
         void fetchReviews(String movieId);
 

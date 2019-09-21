@@ -45,7 +45,7 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.ViewHolder> 
             public void onClick(View view) {
                 mCallback.onMovieClick(mMovies.get(position));
             }
-        });
+    });
     }
 
     @Override

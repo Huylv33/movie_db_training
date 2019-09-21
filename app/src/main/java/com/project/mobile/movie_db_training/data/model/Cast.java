@@ -1,9 +1,15 @@
 package com.project.mobile.movie_db_training.data.model;
 
+import com.google.gson.annotations.SerializedName;
+
 public class Cast {
+    @SerializedName("cast_id")
     private String mCastId;
+    @SerializedName("name")
     private String mName;
+    @SerializedName("profile_path")
     private String mProfilePath;
+    @SerializedName("id")
     private String mId;
 
     public String getCastId() {

@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Adapter;
 import android.widget.HorizontalScrollView;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -26,11 +27,14 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 import com.project.mobile.movie_db_training.R;
+import com.project.mobile.movie_db_training.data.model.Cast;
 import com.project.mobile.movie_db_training.data.model.Movie;
 import com.project.mobile.movie_db_training.data.model.Review;
 import com.project.mobile.movie_db_training.data.model.Video;
+import com.project.mobile.movie_db_training.list.MoviesListFragment;
 import com.project.mobile.movie_db_training.utils.Constants;
 import com.squareup.picasso.Picasso;
+import com.takusemba.multisnaprecyclerview.MultiSnapRecyclerView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -60,18 +64,28 @@ public class MovieDetailFragment extends Fragment implements MovieDetailContract
     TextView mReviewTitle;
     @BindView(R.id.rv_reviews)
     RecyclerView mReviewsRv;
+    @BindView(R.id.rv_cast)
+    MultiSnapRecyclerView mCastRv;
     @BindView(R.id.fab_favorite)
     FloatingActionButton mFabFavorite;
     private ReviewsListAdapter mReviewsAdapter;
+    private CastAdapter mCastAdapter;
     private Unbinder mUnbinder;
     private Movie mMovie;
     private MovieDetailContract.Presenter mPresenter;
     private List<Review> mReviews = new ArrayList<>();
-
+    private List<Cast> mCasts = new ArrayList<>();
+    private Callback mCallback;
     public MovieDetailFragment() {
         // Required empty public constructor
     }
-
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        if (context instanceof MovieDetailFragment.Callback) {
+            mCallback = (MovieDetailFragment.Callback) context;
+        }
+    }
     public static MovieDetailFragment newInstance(@NonNull Movie movie) {
         Bundle args = new Bundle();
         args.putParcelable(Constants.MOVIE_KEY, movie);
@@ -87,6 +101,7 @@ public class MovieDetailFragment extends Fragment implements MovieDetailContract
         mUnbinder = ButterKnife.bind(this, rootView);
         setToolbar();
         setFloatButtonListener();
+        initCastLayout();
         initReviewsLayout();
         return rootView;
     }
@@ -103,6 +118,7 @@ public class MovieDetailFragment extends Fragment implements MovieDetailContract
                 mMovie = movie;
                 showInfo(mMovie);
                 mPresenter.showFavorite(mMovie.getId());
+                mPresenter.fetchCast(mMovie.getId());
                 mPresenter.fetchVideos(mMovie.getId());
                 mPresenter.fetchReviews(mMovie.getId());
             }
@@ -141,7 +157,12 @@ public class MovieDetailFragment extends Fragment implements MovieDetailContract
         mReviewsAdapter = new ReviewsListAdapter(mReviews);
         mReviewsRv.setAdapter(mReviewsAdapter);
     }
-
+    private void initCastLayout() {
+        mCastRv.setLayoutManager(new LinearLayoutManager(getContext(),
+                LinearLayoutManager.HORIZONTAL,false));
+        mCastAdapter = new CastAdapter(mCasts,mCallback);
+        mCastRv.setAdapter(mCastAdapter);
+    }
     private void setFloatButtonListener() {
         mFabFavorite.setOnClickListener(view1 -> {
             onFabFavoriteClick();
@@ -188,11 +209,17 @@ public class MovieDetailFragment extends Fragment implements MovieDetailContract
     public void showReviews(@NonNull List<Review> reviews) {
         mReviewTitle.setText(String.format(getString(R.string.review), reviews.size()));
         if (reviews.size() > 0) {
-            mReviews.clear();
             mReviews.addAll(reviews);
             mReviewsRv.setVisibility(View.VISIBLE);
             mReviewsAdapter.notifyDataSetChanged();
         }
+    }
+
+    @Override
+    public void showCast(List<Cast> casts) {
+        this.mCasts.clear();
+        this.mCasts.addAll(casts);
+        mCastAdapter.notifyDataSetChanged();
     }
 
     private void onImageThumbClick(View view) {
@@ -229,5 +256,9 @@ public class MovieDetailFragment extends Fragment implements MovieDetailContract
         super.onDestroyView();
         mPresenter.destroy();
         mUnbinder.unbind();
+    }
+
+    public interface Callback {
+        void onCastClick(String id);
     }
 }

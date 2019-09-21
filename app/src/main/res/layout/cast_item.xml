@@ -24,7 +24,7 @@
         android:gravity="center"
         android:maxLines="2"
         android:textAppearance="@style/TextAppearance.MaterialComponents.Body2"
-        android:textColor="@color/secondaryText"
+        android:textColor="@color/color_white"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/image_cast_profile"

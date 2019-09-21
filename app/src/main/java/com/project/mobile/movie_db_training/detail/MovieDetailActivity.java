@@ -6,10 +6,12 @@ import android.os.Bundle;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.project.mobile.movie_db_training.R;
+import com.project.mobile.movie_db_training.data.model.Cast;
 import com.project.mobile.movie_db_training.data.model.Movie;
+import com.project.mobile.movie_db_training.person.PersonActivity;
 import com.project.mobile.movie_db_training.utils.Constants;
 
-public class MovieDetailActivity extends AppCompatActivity {
+public class MovieDetailActivity extends AppCompatActivity implements MovieDetailFragment.Callback {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,4 +35,15 @@ public class MovieDetailActivity extends AppCompatActivity {
                 .replace(R.id.fragment_movie_detail, movieDetailFragment)
                 .commit();
     }
+
+    @Override
+    public void onCastClick(String id) {
+        startPersonDetail(id);
+    }
+    private void startPersonDetail(String id) {
+        Intent intent = new Intent(this, PersonActivity.class);
+        intent.putExtra("personId",id);
+        startActivity(intent);
+    }
+
 }
